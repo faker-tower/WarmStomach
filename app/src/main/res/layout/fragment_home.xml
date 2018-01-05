@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/home_frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBaseBackground"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/home_coordinator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/home_Rrefresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.example.axiang.warmstomach.widget.CustomNestedScrollView
+                android:id="@+id/home_nested_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.AppBarLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <FrameLayout
+                            android:id="@+id/ad_column"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_180"
+                            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed">
+
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/carousel"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </FrameLayout>
+
+                        <GridView
+                            android:id="@+id/store_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_160"
+                            android:layout_margin="@dimen/dp_10"
+                            android:horizontalSpacing="@dimen/dp_10"
+                            android:nestedScrollingEnabled="false"
+                            android:numColumns="@integer/integer_6"
+                            android:verticalSpacing="@dimen/dp_10"
+                            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_10"
+                            android:text="@string/for_your_preference"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/sp_20"
+                            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed" />
+
+                        <include
+                            layout="@layout/layout_super_store"
+                            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dp_10"
+                            android:text="@string/accessories_business"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/sp_20"
+                            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed" />
+                    </android.support.design.widget.AppBarLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/home_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="false" />
+                </LinearLayout>
+            </com.example.axiang.warmstomach.widget.CustomNestedScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/home_shopping_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="@dimen/dp_68"
+            android:layout_marginRight="@dimen/dp_12"
+            android:src="@drawable/shopping_cart"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/dp_5"
+            app:fabSize="mini"
+            app:pressedTranslationZ="@dimen/dp_10"
+            app:backgroundTint="@color/colorAccent"
+            app:rippleColor="@color/register_get_vertify" />
+    </android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

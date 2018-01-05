@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_store"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_100"
+    android:padding="@dimen/dp_10"
+    android:background="@drawable/popup_item_click_bg">
+
+    <ImageView
+        android:id="@+id/item_store_avatar"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_toRightOf="@id/item_store_avatar"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_store_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="@integer/integer_1"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/sp_15" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/item_store_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorSecondaryText"
+                android:text="@string/month_sold_on"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/item_store_month_sold_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorSecondaryText"
+                android:layout_marginLeft="@dimen/dp_2"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_3">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/starting_price"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/money_symbol"
+                android:textColor="@color/colorSecondaryText"
+                android:layout_marginLeft="@dimen/dp_2"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/item_store_starting_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="wewewe"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="@dimen/dp_12"
+                android:background="@color/colorSecondaryText"
+                android:layout_marginLeft="@dimen/dp_2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delivery"
+                android:textColor="@color/colorSecondaryText"
+                android:layout_marginLeft="@dimen/dp_2"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/money_symbol"
+                android:textColor="@color/colorSecondaryText"
+                android:layout_marginLeft="@dimen/dp_2"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/item_store_delivery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="wewewe"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_12" />
+
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="@dimen/dp_12"
+                android:background="@color/colorSecondaryText"
+                android:layout_marginLeft="@dimen/dp_2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/per_capita"
+                android:textColor="@color/colorSecondaryText"
+                android:layout_marginLeft="@dimen/dp_2"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/money_symbol"
+                android:textColor="@color/colorSecondaryText"
+                android:layout_marginLeft="@dimen/dp_2"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/item_store_per_capita"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_3">
+            
+            <TextView
+                android:id="@+id/item_store_online_payment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/online_payment"
+                android:textColor="@color/register_get_vertify"
+                android:background="@drawable/support_payment_method_bg"
+                android:textSize="@dimen/sp_10" />
+
+            <TextView
+                android:id="@+id/item_store_cash_on_delivery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cash_on_delivery"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:textColor="@color/register_get_vertify"
+                android:background="@drawable/support_payment_method_bg"
+                android:textSize="@dimen/sp_10" />
+
+            <TextView
+                android:id="@+id/item_store_pick_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:text="@string/pick_up"
+                android:textColor="@color/register_get_vertify"
+                android:background="@drawable/support_payment_method_bg"
+                android:textSize="@dimen/sp_10" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_alignParentRight="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/item_store_more"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_20"
+            android:src="@drawable/more" />
+
+        <TextView
+            android:id="@+id/item_store_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondaryText"
+            android:layout_marginTop="@dimen/dp_2"
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/info"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/personal_info"
+            android:icon="@drawable/presonal_info"
+            android:iconTint="@color/colorPrimary"
+            android:title="@string/personal_info" />
+        <item
+            android:id="@+id/my_collection"
+            android:icon="@drawable/my_collection"
+            android:title="@string/my_collection" />
+        <item
+            android:id="@+id/my_footsteps"
+            android:icon="@drawable/my_footsteps"
+            android:title="@string/my_footsteps" />
+        <item
+            android:id="@+id/my_comment"
+            android:icon="@drawable/my_comment"
+            android:title="@string/my_comment" />
+    </group>
+
+    <item android:title="@string/system">
+        <menu>
+            <item
+                android:id="@+id/system_settings"
+                android:icon="@drawable/system_settings"
+                android:title="@string/system_settings" />
+
+            <item
+                android:id="@+id/exit"
+                android:icon="@drawable/exit"
+                android:title="@string/exit"
+                />
+        </menu>
+    </item>
+</menu>

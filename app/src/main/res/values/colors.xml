@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorBaseBackground">#FAFAFA</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
+    <color name="nav_header_bg_start_color">#74CDE5</color>
+    <color name="nav_header_bg_end_color">#5F83E5</color>
+    <color name="bottom_nav_bar_no_select">	#808080</color>
+    <color name="register_get_vertify">#70CB2C</color>
+    <color name="popup_line_color">#515151</color>
+    <color name="bt_click_bg">#D9D9D9</color>
+    <color name="net_work_error">#7A241E</color>
+    <color name="position_loading_layout_bg">#5C5D4F</color>
+    <color name="fragment_home_bg">#FFFFFF</color>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto/com.axiang.warmstomach">
+    <!--正常字体，多设计一套app开头的以适配26以下的机型-->
+    <font android:font="@font/alegreya_sans_extrabold"
+          android:fontStyle="normal" android:fontWeight="400"
+          app:font="@font/alegreya_sans_extrabold"
+          app:fontStyle="normal" app:fontWeight="400" />
+
+    <font android:font="@font/alegreya_sans_extrabold_italic"
+          android:fontStyle="italic" android:fontWeight="400"
+          app:font="@font/alegreya_sans_extrabold_italic"
+          app:fontStyle="italic" app:fontWeight="400" />
+
+</font-family>

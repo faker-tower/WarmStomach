@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">WarmStomach</string>
+
+    <!--MainActivity-->
+    <string name="exit_program_3s">Click again within 3 seconds to exit the program</string>
+    <string name="sysnc_failed">Synchronization information failed</string>
+
+    <!--BottomNavigationbar-->
+    <string name="home">Home</string>
+    <string name="orders">Orders</string>
+    <string name="find">Find</string>
+
+    <!--NavigationView header-->
+    <string name="register">Register</string>
+    <string name="or">/</string>
+    <string name="login">Login</string>
+
+    <!--NavigationView item-->
+    <string name="personal_info">Personal info</string>
+    <string name="my_collection">My collection</string>
+    <string name="my_footsteps">My footsteps</string>
+    <string name="my_comment">My comment</string>
+    <string name="system">System</string>
+    <string name="system_settings">System settings</string>
+    <string name="exit">Exit</string>
+    <string name="exit_account">Exit the current account</string>
+    <string name="exit_program">Exit the program</string>
+    <string name="take_a_photo">Take a photo</string>
+    <string name="album_selection">Album selection</string>
+    <string name="need_permission">Need permission</string>
+    <string name="create_image_failed">Failed to create avatar file</string>
+    <string name="failed_get_picture">Failed to get the picture</string>
+    <string name="crop_picture_failed">Cropped picture failed</string>
+    <string name="compression_avatar_failed">Compression avatar failed</string>
+    <string name="avatar_upload_failed">Avatar upload failed</string>
+    <string name="avatar_updated_successful">Avatar updated successfully</string>
+    <string name="avatar_update_failed">Avatar update failed</string>
+    <string name="failed_set_avatar">Need to login or register to set the avatar</string>
+
+    <!--DrawerLayout-->
+    <string name="drawer_layout_open">Open</string>
+    <string name="drawer_layout_close">Close</string>
+
+    <!--Position-->
+    <string name="waiting_for_positioning">Waiting for positioning...</string>
+    <string name="positioning">Positioning</string>
+    <string name="positioning_failed">Positioning failed</string>
+    <string name="retry">Retry</string>
+
+    <!--Register fragment-->
+    <string name="get_verification">Get verification</string>
+    <string name="input_phone">Please enter phone number</string>
+    <string name="malformed_phone_number">Malformed phone number</string>
+    <string name="phone_number_registered">The phone number is registered</string>
+    <string name="input_password">Please enter the password</string>
+    <string name="input_vetify">please enter verification code</string>
+    <string name="resend">Resend</string>
+    <string name="password_length">(Password length: 8 ~ 16,only the number and letter mixed)</string>
+    <string name="register_to_login">Already have an account? Go to login</string>
+    <string name="request_vertify_success">Verification code sent successfully</string>
+    <string name="request_vertify_failed">Verification code sent failed</string>
+    <string name="sms_template">Sms template</string>
+    <string name="incorrect_password_format">Incorrect password format</string>
+    <string name="registration_success">Registration success</string>
+    <string name="incorrect_verification_code">Incorrect verification code</string>
+    <string name="registration_failed">Registration failed</string>
+
+    <!--Login-->
+    <string name="use_password_login">Switch login mode(use password login)</string>
+    <string name="use_vertify_login">Use verification code login(recommended)</string>
+    <string name="login_success">Login Success</string>
+    <string name="login_failed">Login failed</string>
+    <string name="phone_number_no_registered">This phone number is not registered yet</string>
+    <string name="wrong_password">Wrong password</string>
+
+    <!--HomFragment-->
+    <string name="network_error">Network anomaly</string>
+    <string name="go_check_it_out">Go check it out</string>
+    <string name="unknown_error">An unknown exception occurs, refresh try</string>
+    <string name="for_your_preference">For your preference</string>
+    <string name="accessories_business">Accessories business</string>
+    <string name="loading">Loading</string>
+    <string name="month_sold_on">Sold on</string>
+    <string name="starting_price">Starting price</string>
+    <string name="money_symbol">$</string>
+    <string name="delivery">Delivery</string>
+    <string name="per_capita">Per capita</string>
+    <string name="online_payment">Online payment</string>
+    <string name="cash_on_delivery">Cash on delivery</string>
+    <string name="pick_up">Support self-pick</string>
+    <string name="search_business">Search business</string>
+    <string name="no_data">No data</string>
+    <string name="search_business_failed">Search business failed</string>
+</resources>

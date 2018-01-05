@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/position_loading_layout_bg">
+
+    <com.example.axiang.warmstomach.widget.CyclicalTextView
+        android:id="@+id/cyclical_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="@dimen/sp_16"
+        android:text="@string/waiting_for_positioning" />
+
+    <Button
+        android:id="@+id/bt_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retry"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/cyclical_text_view"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textSize="@dimen/sp_12"
+        android:visibility="gone"
+        android:textColor="@color/colorAccent" />
+</RelativeLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dp_320">320dp</dimen>
+    <dimen name="dp_280">280dp</dimen>
+    <dimen name="dp_205">205dp</dimen>
+    <dimen name="dp_180">180dp</dimen>
+    <dimen name="dp_160">160dp</dimen>
+    <dimen name="dp_120">120dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
+    <dimen name="dp_90">90dp</dimen>
+    <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_68">68dp</dimen>
+    <dimen name="dp_56">56dp</dimen>
+    <dimen name="dp_48">48dp</dimen>
+    <dimen name="dp_38">38dp</dimen>
+    <dimen name="dp_36">36dp</dimen>
+    <dimen name="dp_32">32dp</dimen>
+    <dimen name="dp_25">25dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_3">3dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
+    <dimen name="dp_1">1dp</dimen>
+
+    <dimen name="sp_20">20sp</dimen>
+    <dimen name="sp_18">18sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_10">10sp</dimen>
+
+    <integer name="integer_200">200</integer>
+    <integer name="integer_135">135</integer>
+    <integer name="integer_100">100</integer>
+    <integer name="integer_16">16</integer>
+    <integer name="integer_8">8</integer>
+    <integer name="integer_6">6</integer>
+    <integer name="integer_4">4</integer>
+    <integer name="integer_1">1</integer>
+</resources>

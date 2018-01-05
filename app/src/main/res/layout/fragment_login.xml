@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.axiang.warmstomach.ui.home.fragments.LoginFragment">
+
+    <EditText
+        android:id="@+id/login_input_phone_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:inputType="phone"
+        android:textSize="@dimen/sp_16"
+        android:hint="@string/input_phone" />
+
+    <EditText
+        android:id="@+id/login_input_vertify_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginRight="@dimen/dp_120"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_below="@id/login_input_phone_et"
+        android:textSize="@dimen/sp_16"
+        android:inputType="number"
+        android:maxLength="@integer/integer_6"
+        android:hint="@string/input_vetify" />
+
+    <Button
+        android:id="@+id/login_get_phone_vertify_bt"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_48"
+        android:text="@string/get_verification"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/dp_120"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textSize="@dimen/sp_12"
+        android:layout_below="@id/login_input_phone_et"
+        android:textColor="@color/colorBaseBackground"
+        android:background="@color/register_get_vertify"
+        android:layout_margin="@dimen/dp_10" />
+
+    <EditText
+        android:id="@+id/login_password_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_below="@id/login_input_phone_et"
+        android:inputType="textPassword"
+        android:layout_marginRight="@dimen/dp_10"
+        android:textSize="@dimen/sp_16"
+        android:maxLength="@integer/integer_16"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:visibility="gone"
+        android:hint="@string/input_password" />
+
+    <ImageView
+        android:id="@+id/login_password_visibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/password_visibility_off"
+        android:layout_alignTop="@id/login_password_et"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:layout_margin="@dimen/dp_10" />
+
+    <Button
+        android:id="@+id/login_bt"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_48"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_68"
+        android:textSize="@dimen/sp_16"
+        android:text="@string/login"
+        android:gravity="center"
+        android:textColor="@color/colorBaseBackground"
+        android:background="@color/register_get_vertify"
+        android:layout_below="@id/login_input_phone_et" />
+
+    <TextView
+        android:id="@+id/use_password_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_below="@id/login_bt"
+        android:textSize="@dimen/sp_12"
+        android:layout_centerHorizontal="true"
+        android:text="@string/use_password_login"
+        android:textColor="@color/colorAccent" />
+</RelativeLayout>

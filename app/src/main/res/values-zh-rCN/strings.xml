@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">暖胃</string>
+
+    <!--MainActivity-->
+    <string name="exit_program_3s">3秒内再点击一次，退出程序</string>
+    <string name="sysnc_failed">同步信息失败</string>
+
+    <!--BottomNavigationbar-->
+    <string name="home">首页</string>
+    <string name="orders">订单</string>
+    <string name="find">发现</string>
+
+    <!--NavigationView header-->
+    <string name="register">注册</string>
+    <string name="or">/</string>
+    <string name="login">登陆</string>
+
+    <!--NavigationView item-->
+    <string name="personal_info">个人信息</string>
+    <string name="my_collection">我的收藏</string>
+    <string name="my_footsteps">我的足迹</string>
+    <string name="my_comment">我的评价</string>
+    <string name="system">系统</string>
+    <string name="system_settings">系统设置</string>
+    <string name="exit">退出</string>
+    <string name="exit_account">退出当前账号</string>
+    <string name="exit_program">退出程序</string>
+    <string name="take_a_photo">拍照</string>
+    <string name="album_selection">相册选取</string>
+    <string name="need_permission">需要权限</string>
+    <string name="create_image_failed">无法创建头像文件</string>
+    <string name="failed_get_picture">无法获得图片</string>
+    <string name="crop_picture_failed">裁剪图片失败</string>
+    <string name="compression_avatar_failed">压缩头像失败</string>
+    <string name="avatar_upload_failed">头像上传失败</string>
+    <string name="avatar_updated_successful">头像更新成功</string>
+    <string name="avatar_update_failed">头像更新失败</string>
+    <string name="failed_set_avatar">需要登陆或注册方能设置头像</string>
+
+    <!--DrawerLayout-->
+    <string name="drawer_layout_open">打开</string>
+    <string name="drawer_layout_close">关闭</string>
+
+    <!--Position-->
+    <string name="waiting_for_positioning">等待定位...</string>
+    <string name="positioning">定位中</string>
+    <string name="positioning_failed">定位失败</string>
+    <string name="retry">重试</string>
+
+    <!--Register fragment-->
+    <string name="get_verification">获取验证码</string>
+    <string name="input_phone">请输入手机号</string>
+    <string name="malformed_phone_number">手机号格式不正确</string>
+    <string name="phone_number_registered">该手机号已注册</string>
+    <string name="input_password">请输入密码</string>
+    <string name="input_vetify">请输入验证码</string>
+    <string name="resend">重发</string>
+    <string name="password_length">（密码长度：8~16，只能数字和字母混合）</string>
+    <string name="incorrect_password_format">密码格式不正确</string>
+    <string name="register_to_login">已有账号？去登陆</string>
+    <string name="request_vertify_success">验证码发送成功</string>
+    <string name="request_vertify_failed">验证码发送失败</string>
+    <string name="incorrect_verification_code">验证码不正确</string>
+    <string name="sms_template">短信模板</string>
+    <string name="registration_success">注册成功</string>
+    <string name="registration_failed">注册失败</string>
+
+    <!--Login-->
+    <string name="use_password_login">切换登陆方式（使用密码登陆）</string>
+    <string name="use_vertify_login">使用验证码登录（推荐）</string>
+    <string name="login_success">登陆成功</string>
+    <string name="login_failed">登陆失败</string>
+    <string name="phone_number_no_registered">该手机号尚未注册</string>
+    <string name="wrong_password">密码错误</string>
+
+    <!--HomFragment-->
+    <string name="network_error">网络异常</string>
+    <string name="go_check_it_out">去检查</string>
+    <string name="unknown_error">发生未知异常，刷新一下试试</string>
+    <string name="for_your_preference">为您推荐</string>
+    <string name="accessories_business">附近商家</string>
+    <string name="loading">加载中</string>
+    <string name="month_sold_on">月售</string>
+    <string name="starting_price">起送</string>
+    <string name="money_symbol">￥</string>
+    <string name="delivery">配送</string>
+    <string name="per_capita">人均</string>
+    <string name="online_payment">在线支付</string>
+    <string name="cash_on_delivery">货到付款</string>
+    <string name="pick_up">支持自取</string>
+    <string name="search_business">搜索商家中</string>
+    <string name="no_data">没有数据了</string>
+    <string name="search_business_failed">搜索商家失败</string>
+</resources>
