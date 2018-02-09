@@ -1,7 +1,10 @@
-package com.example.axiang.warmstomach.ui.home.fragments;
+package com.example.axiang.warmstomach.ui.register_login.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,19 +14,24 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.axiang.warmstomach.C;
 import com.example.axiang.warmstomach.R;
 import com.example.axiang.warmstomach.contracts.LoginContract;
-import com.example.axiang.warmstomach.data.User;
-import com.example.axiang.warmstomach.interfaces.LoginSuccessListener;
+import com.example.axiang.warmstomach.interfaces.OnLoginListener;
+import com.example.axiang.warmstomach.util.NetWorkUtil;
 import com.example.axiang.warmstomach.util.SharedPreferencesUtil;
 import com.example.axiang.warmstomach.util.ToastUtil;
 import com.example.axiang.warmstomach.util.VertifyUtil;
+import com.example.axiang.warmstomach.widget.CustomSnackbar;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -31,7 +39,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.bmob.v3.BmobSMS;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 
@@ -41,9 +48,9 @@ import cn.bmob.v3.listener.QueryListener;
 
 public class LoginFragment extends Fragment implements LoginContract.View {
 
-    private Unbinder unbinder;
-
     // 绑定视图
+    @BindView(R.id.login_relative_layout)
+    RelativeLayout loginRelativeLayout;
     @BindView(R.id.login_input_phone_et)
     EditText loginInputPhoneEt;
     @BindView(R.id.login_input_vertify_et)
@@ -60,6 +67,10 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     TextView usePasswordLogin;
 
     // 绑定String
+    @BindString(R.string.network_error)
+    String networkErrorText;
+    @BindString(R.string.go_check_it_out)
+    String goCheckItOutText;
     @BindString(R.string.malformed_phone_number)
     String malformedPhoneNumberText;
     @BindString(R.string.app_name)
@@ -82,20 +93,23 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     String usePasswordLoginText;
     @BindString(R.string.login_success)
     String loginSuccessText;
-    @BindString(R.string.sysnc_failed)
-    String sysncFailedText;
     @BindString(R.string.incorrect_verification_code)
     String incorrectVerificationCodeText;
 
-    private LoginContract.Presenter presenter;
-    private LoginSuccessListener listener;
+    // 当前Fragment是否在前台显示
+    private boolean isFragmentShowing = false;
+    // 第一次显示
+    private boolean isFirstResume = true;
+
+    private Unbinder mUnbinder;
+    private LoginContract.Presenter mPresenter;
+    private OnLoginListener mListener;
+    private CustomSnackbar mSnackbar;
 
     private boolean isPasswordVisibility = false;
-
     private boolean isUseVertifyLogin = true;
 
-    private final LoginCountDownTimer countDownTimer =
-            new LoginCountDownTimer(60 * 1000, 1000);
+    private LoginCountDownTimer mCountDownTimer;
 
     @Nullable
     @Override
@@ -103,14 +117,20 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        presenter.start();
+        mUnbinder = ButterKnife.bind(this, view);
+        mCountDownTimer = new LoginCountDownTimer(this,
+                60 * 1000,
+                1000);
         return view;
     }
 
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
-        this.presenter = presenter;
+        this.mPresenter = presenter;
+    }
+
+    public void setListener(OnLoginListener listener) {
+        this.mListener = listener;
     }
 
     @Override
@@ -138,7 +158,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                     @Override
                     public void done(Integer integer, BmobException e) {
                         if (e == null) {
-                            countDownTimer.start();
+                            mCountDownTimer.start();
                             ToastUtil.showToast(requestVertifySuccessText);
                         } else {
                             ToastUtil.showToast(requestVertifyFailedText);
@@ -166,6 +186,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @OnClick(R.id.login_bt)
     public void onLoginBtClicked() {
         loginBt.setClickable(false);
+        hideInputMethod();
         loginBt.setBackgroundColor(ContextCompat.getColor(getContext(),
                 R.color.colorSecondaryText));
 
@@ -173,10 +194,16 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                 .toString()
                 .replace(" ", "");
         // 判断该手机号是否已经注册
-        if (!presenter.phoneNumberRegistered(phoneNumber)) {
-            ToastUtil.showToast(phoneNumberNoRegisteredText);
+        if (!NetWorkUtil.isNetWorkConnected()) {
+            showNetWorkError();
             loginBtRestore();
             return;
+        } else {
+            if (!mPresenter.phoneNumberRegistered(phoneNumber)) {
+                ToastUtil.showToast(phoneNumberNoRegisteredText);
+                loginBtRestore();
+                return;
+            }
         }
 
         if (isUseVertifyLogin) {
@@ -184,7 +211,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
             String vertify = loginInputVertifyEt.getText()
                     .toString()
                     .replace(" ", "");
-            presenter.loginByVertify(phoneNumber, vertify);
+            mPresenter.loginByVertify(phoneNumber, vertify);
         } else {
             // 密码登陆
             String password = loginPasswordEt.getText().toString();
@@ -193,7 +220,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                 loginBtRestore();
                 return;
             }
-            presenter.loginByPasssword(phoneNumber, password);
+            mPresenter.loginByPasssword(phoneNumber, password);
         }
     }
 
@@ -212,6 +239,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
             loginPasswordVisibility.setVisibility(View.VISIBLE);
             isUseVertifyLogin = false;
             usePasswordLogin.setText(useVertifyLoginText);
+            hideInputMethod();
         } else {
             loginInputVertifyEt.setVisibility(View.VISIBLE);
             loginGetPhoneVertifyBt.setVisibility(View.VISIBLE);
@@ -222,15 +250,29 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         }
     }
 
+    @OnClick(R.id.login_to_register)
+    public void onLoginToRegisterClicked() {
+        hideInputMethod();
+        mListener.goToRegister();
+    }
+
+    // 隐藏软键盘
+    private void hideInputMethod() {
+        InputMethodManager imm = (InputMethodManager) getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getActivity().getWindow()
+                            .getDecorView()
+                            .getWindowToken(),
+                    0);
+        }
+    }
+
     @Override
     public void loginSuccess() {
-        User user = BmobUser.getCurrentUser(User.class);
-        if (user != null) {
-            ToastUtil.showToast(loginSuccessText);
-            listener.success();
-        } else {
-            loginBtRestore();
-            ToastUtil.showToast(sysncFailedText);
+        ToastUtil.showToast(loginSuccessText);
+        if (isFragmentShowing) {
+            mListener.success();
         }
     }
 
@@ -241,47 +283,98 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         } else {
             ToastUtil.showToast(wrongPasswordText);
         }
-        loginBtRestore();
-    }
-
-    public void setListener(LoginSuccessListener listener) {
-        this.listener = listener;
+        if (isFragmentShowing) {
+            loginBtRestore();
+        }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
+    public void showNetWorkError() {
+        if (isFragmentShowing) {
+            if (mSnackbar == null) {
+                mSnackbar = new CustomSnackbar.Builder()
+                        .setParentView(loginRelativeLayout)
+                        .setMessageText(networkErrorText)
+                        .setMessageColorId(R.color.net_work_error)
+                        .setActionText(goCheckItOutText)
+                        .setActionColorId(R.color.register_get_vertify)
+                        .setListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mSnackbar.dismiss();
+                                startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                            }
+                        })
+                        .build();
+            } else {
+                mSnackbar.dismiss();
+            }
+            mSnackbar.show();
         }
     }
 
-    class LoginCountDownTimer extends CountDownTimer {
-
-        public LoginCountDownTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long l) {
-            loginGetPhoneVertifyBt.setClickable(false);
+    private void updateLoginGetPhoneVertifyBt(boolean isClickable, long l) {
+        loginGetPhoneVertifyBt.setClickable(isClickable);
+        if (isClickable) {
+            loginGetPhoneVertifyBt.setBackgroundColor(ContextCompat.getColor(getContext(),
+                    R.color.register_get_vertify));
+            loginGetPhoneVertifyBt.setText(resendText);
+        } else {
             loginGetPhoneVertifyBt.setBackgroundColor(ContextCompat.getColor(getContext(),
                     R.color.colorSecondaryText));
             loginGetPhoneVertifyBt.setText(l / 1000 + "s " + resendText);
         }
+    }
 
-        @Override
-        public void onFinish() {
-            loginGetPhoneVertifyBt.setClickable(true);
-            loginGetPhoneVertifyBt.setBackgroundColor(ContextCompat.getColor(getContext(),
-                    R.color.register_get_vertify));
-            loginGetPhoneVertifyBt.setText(resendText);
+    @Override
+    public void onResume() {
+        super.onResume();
+        isFragmentShowing = true;
+        if (isFirstResume) {
+            mPresenter.start();
+            isFirstResume = false;
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isFragmentShowing = false;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        mUnbinder.unbind();
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+            mCountDownTimer = null;
+        }
+    }
+
+    static class LoginCountDownTimer extends CountDownTimer {
+
+        private WeakReference<LoginFragment> fragmentReference;
+
+        LoginCountDownTimer(LoginFragment loginFragment,
+                            long millisInFuture,
+                            long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+            fragmentReference = new WeakReference<LoginFragment>(loginFragment);
+        }
+
+        @Override
+        public void onTick(long l) {
+            if (fragmentReference.get() != null && fragmentReference.get().isFragmentShowing) {
+                fragmentReference.get().updateLoginGetPhoneVertifyBt(false, 1);
+            }
+        }
+
+        @Override
+        public void onFinish() {
+            if (fragmentReference.get() != null && fragmentReference.get().isFragmentShowing) {
+                fragmentReference.get().updateLoginGetPhoneVertifyBt(true, -1);
+            }
+        }
     }
 }

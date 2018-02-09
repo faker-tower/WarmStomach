@@ -1,6 +1,5 @@
 package com.example.axiang.warmstomach.util;
 
-import android.content.Context;
 import android.widget.Toast;
 
 import com.example.axiang.warmstomach.WarmStomachApplication;
@@ -11,16 +10,16 @@ import com.example.axiang.warmstomach.WarmStomachApplication;
 
 public class ToastUtil {
 
-    private static Toast toast;
+    private static Toast mToast;
 
     public static void showToast(String content) {
-        if (toast == null) {
-            toast = Toast.makeText(WarmStomachApplication.getInstance(),
+        if (mToast == null) {
+            mToast = Toast.makeText(WarmStomachApplication.getInstance(),
                     content,
                     Toast.LENGTH_SHORT);
         } else {
-            toast.setText(content);
+            mToast.setText(content);
         }
-        toast.show();
+        mToast.show();
     }
 }

@@ -12,43 +12,43 @@ import android.widget.PopupWindow;
 
 public class CustomPopupWindow implements PopupWindow.OnDismissListener {
 
-    private PopupWindow popupWindow;
+    private PopupWindow mPopupWindow;
 
-    private Context context;
+    private Context mContext;
 
-    private View contentView;
+    private View mContentView;
 
-    private Activity activity;
+    private Activity mActivity;
 
     public CustomPopupWindow(Builder builder) {
-        this.context = builder.context;
-        this.contentView = LayoutInflater.from(context).inflate(builder.contentViewId, null);
+        this.mContext = builder.context;
+        this.mContentView = LayoutInflater.from(mContext).inflate(builder.contentViewId, null);
         if (builder.width == 0) {
             builder.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
         if (builder.height == 0) {
             builder.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
-        popupWindow = new PopupWindow(contentView,
+        mPopupWindow = new PopupWindow(mContentView,
                 builder.width,
                 builder.height,
                 builder.focusable);
         if (builder.backgroupAlpha >= 0 && builder.backgroupAlpha < 1) {
-            this.activity = builder.activity;
-            WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+            this.mActivity = builder.activity;
+            WindowManager.LayoutParams params = mActivity.getWindow().getAttributes();
             params.alpha = builder.backgroupAlpha;
             builder.activity.getWindow().setAttributes(params);
         }
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindow.setOutsideTouchable(builder.touchable);
-        popupWindow.setAnimationStyle(builder.animationStyle);
-        popupWindow.setOnDismissListener(this);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mPopupWindow.setOutsideTouchable(builder.touchable);
+        mPopupWindow.setAnimationStyle(builder.animationStyle);
+        mPopupWindow.setOnDismissListener(this);
     }
 
     public CustomPopupWindow showAtLocation(int rootViewId, int gravity, int x, int y) {
-        if (popupWindow != null) {
-            View rootView = LayoutInflater.from(context).inflate(rootViewId, null);
-            popupWindow.showAtLocation(rootView, gravity, x, y);
+        if (mPopupWindow != null) {
+            View rootView = LayoutInflater.from(mContext).inflate(rootViewId, null);
+            mPopupWindow.showAtLocation(rootView, gravity, x, y);
         }
         return this;
     }
@@ -61,20 +61,20 @@ public class CustomPopupWindow implements PopupWindow.OnDismissListener {
     }
 
     public View getChildView(int childViewId) {
-        if (popupWindow != null) {
-            return this.contentView.findViewById(childViewId);
+        if (mPopupWindow != null) {
+            return this.mContentView.findViewById(childViewId);
         }
         return null;
     }
 
     @Override
     public void onDismiss() {
-        if (popupWindow != null) {
-            popupWindow.dismiss();
-            if (activity != null) {
-                WindowManager.LayoutParams params = activity.getWindow().getAttributes();
+        if (mPopupWindow != null) {
+            mPopupWindow.dismiss();
+            if (mActivity != null) {
+                WindowManager.LayoutParams params = mActivity.getWindow().getAttributes();
                 params.alpha = 1.0f;
-                activity.getWindow().setAttributes(params);
+                mActivity.getWindow().setAttributes(params);
             }
         }
     }

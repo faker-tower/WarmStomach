@@ -17,19 +17,19 @@ import android.util.AttributeSet;
 
 public class CyclicalTextView extends AppCompatTextView {
 
-    private Paint paint;
+    private Paint mPaint;
 
-    private int viewWidth = 0;
+    private int mViewWidth = 0;
 
-    private Matrix gradientMatrix;
+    private Matrix mGradientMatrix;
 
-    private LinearGradient linearGradient;
+    private LinearGradient mLinearGradient;
 
-    private boolean animating = true;
+    private boolean mAnimating = true;
 
-    private int translate = 0;
+    private int mTranslate = 0;
 
-    private int delta = 15;
+    private int mDelta = 15;
 
     public CyclicalTextView(Context context) {
         super(context, null);
@@ -41,24 +41,24 @@ public class CyclicalTextView extends AppCompatTextView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (viewWidth == 0) {
-            viewWidth = getMeasuredWidth();
-            if (viewWidth > 0) {
-                paint = getPaint();
+        if (mViewWidth == 0) {
+            mViewWidth = getMeasuredWidth();
+            if (mViewWidth > 0) {
+                mPaint = getPaint();
                 String text = getText().toString();
                 int size;
                 if (text.length() > 0) {
-                    size = viewWidth * 2 / text.length();
+                    size = mViewWidth * 2 / text.length();
                 } else {
-                    size = viewWidth;
+                    size = mViewWidth;
                 }
-                linearGradient = new LinearGradient(-size, 0, 0, 0,
+                mLinearGradient = new LinearGradient(-size, 0, 0, 0,
                         new int[] {0x33ffffff, 0xffffffff, 0x33ffffff},
                         new float[] {0, 0.5f, 1},
                         //边缘融合
                         Shader.TileMode.CLAMP);
-                paint.setShader(linearGradient);
-                gradientMatrix = new Matrix();
+                mPaint.setShader(mLinearGradient);
+                mGradientMatrix = new Matrix();
             }
         }
     }
@@ -67,14 +67,14 @@ public class CyclicalTextView extends AppCompatTextView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int length = Math.max(length(), 1);
-        if (animating && gradientMatrix != null) {
+        if (mAnimating && mGradientMatrix != null) {
             float textWidth = getPaint().measureText(getText().toString());
-            translate += delta;
-            if (translate > textWidth + 1 || translate < 1) {
-                delta = -delta;
+            mTranslate += mDelta;
+            if (mTranslate > textWidth + 1 || mTranslate < 1) {
+                mDelta = -mDelta;
             }
-            gradientMatrix.setTranslate(translate, 0);
-            linearGradient.setLocalMatrix(gradientMatrix);
+            mGradientMatrix.setTranslate(mTranslate, 0);
+            mLinearGradient.setLocalMatrix(mGradientMatrix);
             postInvalidateDelayed(30);
         }
     }

@@ -3,12 +3,11 @@ package com.example.axiang.warmstomach.presenters;
 import com.example.axiang.warmstomach.C;
 import com.example.axiang.warmstomach.contracts.RegisterContract;
 import com.example.axiang.warmstomach.data.User;
-import com.example.axiang.warmstomach.util.SharedPreferencesUtil;
+import com.example.axiang.warmstomach.util.NetWorkUtil;
 
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -19,18 +18,18 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterPresenter implements RegisterContract.Presenter {
 
-    private RegisterContract.View view;
+    private RegisterContract.View mView;
 
     private boolean phoneNumberExist = false;
 
     @Override
     public void start() {
-        view.initView();
+        mView.initView();
     }
 
     @Override
     public void setView(RegisterContract.View view) {
-        this.view = view;
+        this.mView = view;
     }
 
     @Override
@@ -65,9 +64,12 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             @Override
             public void done(User user, BmobException e) {
                 if (e == null) {
-                    view.registerSuccess();
+                    mView.registerSuccess();
                 } else {
-                    view.RegisterFailed();
+                    if (!NetWorkUtil.isNetWorkConnected()) {
+                        mView.showNetWorkError();
+                    }
+                    mView.RegisterFailed();
                 }
             }
         });

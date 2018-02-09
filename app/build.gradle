@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.example.axiang.warmstomach"
         minSdkVersion 21
@@ -40,9 +41,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.4.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
     //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务
-    implementation('cn.bmob.android:bmob-sdk:3.5.7') {
-        exclude module:"okio"
-    }
+    implementation 'cn.bmob.android:bmob-sdk:3.5.9'
     //bmob-push：Bmob的推送包
     implementation 'cn.bmob.android:bmob-push:0.8'
     //bmob-sms ：Bmob单独为短信服务提供的包
@@ -56,23 +55,23 @@ dependencies {
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.3'
     // PreferenceScreen系统设置界面
     implementation 'com.android.support:preference-v14:27.0.2'
-    // 异步
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
-    // Rxjava的Android扩展库
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    // 网络请求库
-    implementation('com.squareup.retrofit2:retrofit:2.3.0')
-            // transitive设置为false表示不自动处理子依赖项，需要手动添加每个依赖项
-            { transitive = false }
-    // Http框架
-    implementation('com.squareup.okhttp3:okhttp:3.9.1')
-            { transitive = false }
-    //适配RxJava2.x的适配器
-    implementation('com.squareup.retrofit2:adapter-rxjava2:2.3.0')
-            { transitive = false }
-    // Gson转化器
-    implementation('com.squareup.retrofit2:converter-gson:2.3.0')
-            { transitive = false }
+//    // 异步
+//    implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
+//    // Rxjava的Android扩展库
+//    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+//    // 网络请求库
+//    implementation('com.squareup.retrofit2:retrofit:2.3.0')
+//            // transitive设置为false表示不自动处理子依赖项，需要手动添加每个依赖项
+//            { transitive = false }
+//    // Http框架
+//    implementation('com.squareup.okhttp3:okhttp:3.9.1')
+//            { transitive = false }
+//    //适配RxJava2.x的适配器
+//    implementation('com.squareup.retrofit2:adapter-rxjava2:2.3.0')
+//            { transitive = false }
+//    // Gson转化器
+//    implementation('com.squareup.retrofit2:converter-gson:2.3.0')
+//            { transitive = false }
     // 使用MultiDexApplication代替Application
     implementation 'com.android.support:multidex:1.0.2'
     // 图片压缩库

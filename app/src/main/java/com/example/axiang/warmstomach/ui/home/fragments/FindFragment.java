@@ -19,11 +19,11 @@ public class FindFragment extends Fragment implements FindContract.View {
 
     private static final String TAG = FindFragment.class.getSimpleName();
 
-    private FindContract.Presenter presenter;
+    private FindContract.Presenter mPresenter;
 
     @Override
     public void setPresenter(FindContract.Presenter presenter) {
-        this.presenter = presenter;
+        this.mPresenter = presenter;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.axiang.warmstomach.presenters;
 import com.example.axiang.warmstomach.C;
 import com.example.axiang.warmstomach.contracts.LoginContract;
 import com.example.axiang.warmstomach.data.User;
+import com.example.axiang.warmstomach.util.NetWorkUtil;
 
 import java.util.List;
 
@@ -18,18 +19,18 @@ import cn.bmob.v3.listener.LogInListener;
 
 public class LoginPresenter implements LoginContract.Presenter {
 
-    private LoginContract.View view;
+    private LoginContract.View mView;
 
     private boolean phoneNumberExist = true;
 
     @Override
     public void start() {
-        view.initView();
+        mView.initView();
     }
 
     @Override
     public void setView(LoginContract.View view) {
-        this.view = view;
+        this.mView = view;
     }
 
     @Override
@@ -55,9 +56,12 @@ public class LoginPresenter implements LoginContract.Presenter {
             @Override
             public void done(User user, BmobException e) {
                 if (user != null) {
-                    view.loginSuccess();
+                    mView.loginSuccess();
                 } else {
-                    view.loginFailed();
+                    if (!NetWorkUtil.isNetWorkConnected()) {
+                        mView.showNetWorkError();
+                    }
+                    mView.loginFailed();
                 }
             }
         });
@@ -69,9 +73,12 @@ public class LoginPresenter implements LoginContract.Presenter {
             @Override
             public void done(User user, BmobException e) {
                 if (user != null) {
-                    view.loginSuccess();
+                    mView.loginSuccess();
                 } else {
-                    view.loginFailed();
+                    if (!NetWorkUtil.isNetWorkConnected()) {
+                        mView.showNetWorkError();
+                    }
+                    mView.loginFailed();
                 }
             }
         });

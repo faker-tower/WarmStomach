@@ -3,9 +3,8 @@
 
     <!--MainActivity-->
     <string name="exit_program_3s">Click again within 3 seconds to exit the program</string>
-    <string name="sysnc_failed">Synchronization information failed</string>
 
-    <!--BottomNavigationbar-->
+    <!--BottomNavigationBar-->
     <string name="home">Home</string>
     <string name="orders">Orders</string>
     <string name="find">Find</string>
@@ -42,9 +41,8 @@
     <string name="drawer_layout_close">Close</string>
 
     <!--Position-->
-    <string name="waiting_for_positioning">Waiting for positioning...</string>
-    <string name="positioning">Positioning</string>
-    <string name="positioning_failed">Positioning failed</string>
+    <string name="positioning">Positioning...</string>
+    <string name="positioning_failed_retry">Positioning failed,please click retry</string>
     <string name="retry">Retry</string>
 
     <!--Register fragment-->
@@ -67,6 +65,7 @@
 
     <!--Login-->
     <string name="use_password_login">Switch login mode(use password login)</string>
+    <string name="login_to_register">No account? To register</string>
     <string name="use_vertify_login">Use verification code login(recommended)</string>
     <string name="login_success">Login Success</string>
     <string name="login_failed">Login failed</string>
@@ -74,9 +73,11 @@
     <string name="wrong_password">Wrong password</string>
 
     <!--HomFragment-->
+    <string name="loading_data">Efforts to load data...</string>
     <string name="network_error">Network anomaly</string>
+    <string name="unknown_error">Unknown exception</string>
     <string name="go_check_it_out">Go check it out</string>
-    <string name="unknown_error">An unknown exception occurs, refresh try</string>
+    <string name="unknown_error_refresh">An unknown exception occurs, refresh try</string>
     <string name="for_your_preference">For your preference</string>
     <string name="accessories_business">Accessories business</string>
     <string name="loading">Loading</string>

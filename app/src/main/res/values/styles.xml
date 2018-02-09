@@ -26,14 +26,13 @@
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
         <!--辅助的文字颜色，一般比textColorPrimary的颜色弱一点，用于一些弱化的表示-->
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.START" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowBackground">@drawable/app_start_bg</item>
     </style>
-    
+
     <style name="popup_anim_style">
         <!--进场动画-->
         <item name="android:windowEnterAnimation">@anim/popup_show</item>

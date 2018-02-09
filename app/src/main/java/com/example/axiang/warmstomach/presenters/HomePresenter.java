@@ -8,14 +8,17 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.axiang.warmstomach.C;
+import com.example.axiang.warmstomach.R;
 import com.example.axiang.warmstomach.WarmStomachApplication;
 import com.example.axiang.warmstomach.contracts.HomeContract;
 import com.example.axiang.warmstomach.data.Store;
 import com.example.axiang.warmstomach.data.StoreAd;
 import com.example.axiang.warmstomach.data.SuperStore;
+import com.example.axiang.warmstomach.util.CalculateUtil;
 import com.example.axiang.warmstomach.util.NetWorkUtil;
 import com.example.axiang.warmstomach.util.SharedPreferencesUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -30,103 +33,16 @@ import cn.bmob.v3.listener.QueryListener;
 
 public class HomePresenter implements HomeContract.Presenter {
 
-    private HomeContract.View view;
-
-    public LocationClient mLocationClient = null;
-    private BDLocationListener myListener = new MyLocationListener();
+    private HomeContract.View mView;
 
     @Override
     public void start() {
-        mLocationClient = new LocationClient(WarmStomachApplication.getInstance());
-        //声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);
-        //注册监听函数
-        LocationClientOption option = new LocationClientOption();
-        // 可选，设置返回经纬度坐标类型，默认gcj02
-        // gcj02：国测局坐标
-        // bd09ll：百度经纬度坐标
-        // bd09：百度墨卡托坐标
-        // 海外地区定位，无需设置坐标类型，统一返回wgs84类型坐标
-        option.setCoorType("bd09ll");
-        // 可选，设置发起定位请求的间隔，int类型，单位ms
-        // 如果设置为0，则代表单次定位，即仅定位一次，默认为0
-        // 如果设置非0，需设置1000ms以上才有效
-        option.setScanSpan(0);
-        // 可选，设置是否使用gps，默认false
-        // 使用高精度和仅用设备两种定位模式的，参数必须设置为true
-        option.setOpenGps(true);
-        // 可选，定位SDK内部是一个service，并放到了独立进程
-        // 设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
-        option.setIgnoreKillProcess(false);
-        // 可选，7.2版本新增能力
-        // 如果设置了该接口，首次启动定位时，会先判断当前WiFi是否超出有效期
-        // 若超出有效期，会先重新扫描WiFi，然后定位
-        option.SetIgnoreCacheException(false);
-        // 是否返回详细的描述地址
-        option.setIsNeedAddress(true);
-        // // 是否返回位置描述信息
-        option.setIsNeedLocationDescribe(true);
-        mLocationClient.setLocOption(option);
-        mLocationClient.start();
+        loadStoreAdData();
     }
 
     @Override
     public void setView(HomeContract.View view) {
-        this.view = view;
-    }
-
-    public class MyLocationListener implements BDLocationListener {
-
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            //定位sdk获取位置后回调
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                // 纬度
-                double latitude = location.getLatitude();
-                // 经度
-                double longitude = location.getLongitude();
-                // 国家名称
-                String county = location.getCountry();
-                // 城市
-                String city = location.getCity();
-                // 区
-                String district = location.getDistrict();
-                // 街道
-                String street = location.getStreet();
-                // 地址信息
-                String addrStr = location.getAddrStr();
-                // 位置描述信息
-                String locationDescribe = location.getLocationDescribe();
-                mLocationClient.unRegisterLocationListener(myListener);
-                mLocationClient.stop();
-                if (county == null || city == null
-                        || district == null
-                        || street == null
-                        || addrStr == null
-                        || locationDescribe == null
-                        ||TextUtils.isEmpty(county)
-                        || TextUtils.isEmpty(city)
-                        || TextUtils.isEmpty(district)
-                        || TextUtils.isEmpty(street)
-                        || TextUtils.isEmpty(addrStr)
-                        || TextUtils.isEmpty(locationDescribe)
-                        ) {
-                    view.showPositionError();
-                } else {
-                    SharedPreferencesUtil.getSharedPreferences()
-                            .edit()
-                            .putString(C.LONGITUDE, longitude + "")
-                            .putString(C.LATITUDE, latitude + "")
-                            .commit();
-                    view.showPositionSuccess(county,
-                            city,
-                            district,
-                            street,
-                            addrStr,
-                            locationDescribe);
-                }
-            }
-        }
+        this.mView = view;
     }
 
     @Override
@@ -137,10 +53,13 @@ public class HomePresenter implements HomeContract.Presenter {
         query.findObjects(new FindListener<StoreAd>() {
             @Override
             public void done(List<StoreAd> list, BmobException e) {
-                if (e != null) {
+                if (e != null || list == null || list.isEmpty()) {
+                    Log.e("loadStoreAdData", e.toString());
+                    e.printStackTrace();
                     handleLoadError();
                 } else {
-                    view.updateStoreAd(list);
+                    mView.updateStoreAd(list);
+                    loadSuperStoreData();
                 }
             }
         });
@@ -153,54 +72,137 @@ public class HomePresenter implements HomeContract.Presenter {
         double latitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
                 .getString(C.LATITUDE, ""));
         BmobQuery<SuperStore> query = new BmobQuery<>();
-        query.addWhereNear(C.SUPER_STORE_LOCATION, new BmobGeoPoint(longitude, latitude));
-        query.setLimit(1);
         query.setSkip(0);
         query.findObjects(new FindListener<SuperStore>() {
             @Override
             public void done(List<SuperStore> list, BmobException e) {
-                if (e != null) {
+                if (e != null || list == null || list.isEmpty()) {
+                    Log.e("loadStoreAdData", e.toString());
+                    e.printStackTrace();
                     handleLoadError();
                 } else {
+                    quiteSortSuperStoreList(list, 0, list.size() - 1);
                     loadStoreBySuperStoreId(list.get(0).getSuperStoreId());
                 }
             }
         });
     }
 
+    // 快速算法排序SuperStoreList数组
+    private void quiteSortSuperStoreList(List<SuperStore> superStores,
+                                                     int start,
+                                                     int end) {
+        if (start < end) {
+            int temp = sortSuperStoreList(superStores, start, end);
+            quiteSortSuperStoreList(superStores, start, temp - 1);
+            quiteSortSuperStoreList(superStores, temp + 1, end);
+        }
+    }
+
+    private int sortSuperStoreList(List<SuperStore> superStores, int start, int end) {
+        double localLongitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
+                .getString(C.LONGITUDE, ""));
+        double localLatitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
+                .getString(C.LATITUDE, ""));
+        SuperStore superStore = superStores.get(start);
+        while (start < end) {
+            while (start < end && CalculateUtil.getDistance(localLongitude,
+                    localLatitude,
+                    superStore.getSuperStoreLocation().getLongitude(),
+                    superStore.getSuperStoreLocation().getLatitude())
+                    <= CalculateUtil.getDistance(localLongitude,
+                    localLatitude,
+                    superStores.get(end).getSuperStoreLocation().getLongitude(),
+                    superStores.get(end).getSuperStoreLocation().getLatitude())) {
+                end--;
+            }
+            if (start < end) {
+                superStores.set(start++, superStores.get(end));
+            }
+            while (start < end && CalculateUtil.getDistance(localLongitude,
+                    localLatitude,
+                    superStore.getSuperStoreLocation().getLongitude(),
+                    superStore.getSuperStoreLocation().getLatitude())
+                    >= CalculateUtil.getDistance(localLongitude,
+                    localLatitude,
+                    superStores.get(start).getSuperStoreLocation().getLongitude(),
+                    superStores.get(start).getSuperStoreLocation().getLatitude())) {
+                start++;
+            }
+            if (start < end) {
+                superStores.set(end--, superStores.get(start));
+            }
+        }
+        superStores.set(start, superStore);
+        return start;
+    }
+
     @Override
     public void loadInterfaceStoreData(final int offset) {
-        double longitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
-                .getString(C.LONGITUDE, ""));
-        double latitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
-                .getString(C.LATITUDE, ""));
         BmobQuery<Store> query = new BmobQuery<>();
-        query.addWhereNear(C.STORE_LOCATION, new BmobGeoPoint(longitude, latitude));
-        query.setLimit(C.QUERY_STORE_NUMBER);
         query.setSkip(offset);
         query.findObjects(new FindListener<Store>() {
             @Override
             public void done(List<Store> list, BmobException e) {
-                if (offset > 0) {
-                    view.loadMoreStoreDataFinish();
-                }
-                if (e != null) {
-                    Log.e("done: ", e.toString());
+                if (e != null || list == null || list.isEmpty()) {
+                    Log.e("loadStoreAdData", e.toString());
                     e.printStackTrace();
                     handleLoadError();
-                    view.updateFooterWhenError();
                 } else {
-                    if (list != null && list.size() > 0) {
-                        view.updateStore(list);
-                        if (list.size() < C.QUERY_STORE_NUMBER) {
-                            view.updateFooterWhenNoData();
-                        }
-                    } else {
-                        view.updateFooterWhenNoData();
-                    }
+                    quiteSortStoreList(list, 0, list.size() - 1);
+                    mView.updateStore(list);
                 }
             }
         });
+    }
+
+    // 快速算法排序StoreList数组
+    private void quiteSortStoreList(List<Store> stores,
+                                         int start,
+                                         int end) {
+        if (start < end) {
+            int temp = sortStoreList(stores, start, end);
+            quiteSortStoreList(stores, start, temp - 1);
+            quiteSortStoreList(stores, temp + 1, end);
+        }
+    }
+
+    private int sortStoreList(List<Store> stores, int start, int end) {
+        double localLongitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
+                .getString(C.LONGITUDE, ""));
+        double localLatitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
+                .getString(C.LATITUDE, ""));
+        Store store = stores.get(start);
+        while (start < end) {
+            while (start < end && CalculateUtil.getDistance(localLongitude,
+                    localLatitude,
+                    store.getStoreLocation().getLongitude(),
+                    store.getStoreLocation().getLatitude())
+                    <= CalculateUtil.getDistance(localLongitude,
+                    localLatitude,
+                    stores.get(end).getStoreLocation().getLongitude(),
+                    stores.get(end).getStoreLocation().getLatitude())) {
+                end--;
+            }
+            if (start < end) {
+                stores.set(start++, stores.get(end));
+            }
+            while (start < end && CalculateUtil.getDistance(localLongitude,
+                    localLatitude,
+                    store.getStoreLocation().getLongitude(),
+                    store.getStoreLocation().getLatitude())
+                    >= CalculateUtil.getDistance(localLongitude,
+                    localLatitude,
+                    stores.get(start).getStoreLocation().getLongitude(),
+                    stores.get(start).getStoreLocation().getLatitude())) {
+                start++;
+            }
+            if (start < end) {
+                stores.set(end--, stores.get(start));
+            }
+        }
+        stores.set(start, store);
+        return start;
     }
 
     public void loadStoreBySuperStoreId(String storeId) {
@@ -208,20 +210,53 @@ public class HomePresenter implements HomeContract.Presenter {
         query.getObject(storeId, new QueryListener<Store>() {
             @Override
             public void done(Store store, BmobException e) {
-                if (e != null) {
+                if (e != null || store == null) {
+                    Log.e("loadStoreAdData", e.toString());
+                    e.printStackTrace();
                     handleLoadError();
                 } else {
-                    view.updateSuperStore(store);
+                    mView.updateSuperStore(store);
+                    loadInterfaceStoreData(0);
                 }
             }
         });
     }
 
+    @Override
+    public void loadMoreStoreData(List<Store> stores, int offset) {
+        try {
+            if (!NetWorkUtil.isNetWorkConnected()) {
+                throw new Exception();
+            }
+            List<Store> responseStores = new ArrayList<>();
+            for (int i = 0; i < C.QUERY_STORE_NUMBER; i++) {
+                if (i + offset < stores.size()) {
+                    responseStores.add(stores.get(i + offset));
+                }
+            }
+            if (responseStores.size() > 0) {
+                mView.updateStore(responseStores);
+                if (responseStores.size() < C.QUERY_STORE_NUMBER) {
+                    mView.updateFooterWhenNoData();
+                }
+            } else {
+                mView.updateFooterWhenNoData();
+            }
+        } catch (Exception e) {
+            mView.updateFooterWhenError();
+            handleLoadError();
+        } finally {
+            if (offset > 0) {
+                mView.loadMoreStoreDataFinish();
+            }
+        }
+    }
+
     private void handleLoadError() {
         if (!NetWorkUtil.isNetWorkConnected()) {
-            view.showNetWorkError();
+            mView.showNetWorkError();
         } else {
-            view.showUnknownError();
+            mView.showUnknownError();
         }
     }
 }

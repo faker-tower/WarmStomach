@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.axiang.warmstomach.R;
 import com.example.axiang.warmstomach.interfaces.AdColumnOnClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,36 +24,42 @@ import java.util.List;
 
 public class CarouselAdapter extends PagerAdapter {
 
-    private Context context;
-    private List<String> imageUrlList;
-    private AdColumnOnClickListener listener;
+    private Context mContext;
+    private List<String> mImageUrls;
+    private AdColumnOnClickListener mListener;
 
-    public CarouselAdapter(Context context, List<String> imageUrlList) {
+    public CarouselAdapter(Context context, @NonNull List<String> imageUrls) {
         super();
-        this.context = context;
-        this.imageUrlList = imageUrlList;
+        this.mContext = context;
+        this.mImageUrls = imageUrls;
     }
 
     public void setListener(AdColumnOnClickListener listener) {
-        this.listener = listener;
+        this.mListener = listener;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        if (imageUrls != null && !imageUrls.isEmpty()) {
+            this.mImageUrls = imageUrls;
+        }
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-        ImageView adsPicture = new ImageView(context);
+        ImageView adsPicture = new ImageView(mContext);
         adsPicture.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Glide.with(context)
-                .load(imageUrlList.get(position % imageUrlList.size()))
+        Glide.with(mContext)
+                .load(mImageUrls.get(position % mImageUrls.size()))
                 .apply(new RequestOptions().centerCrop()
                         .placeholder(R.color.position_loading_layout_bg)
                         .error(R.color.net_work_error))
                 .into(adsPicture);
-        if (listener != null) {
+        if (mListener != null) {
             adsPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onItemClick(position % imageUrlList.size());
+                    mListener.onItemClick(position % mImageUrls.size());
                 }
             });
         }

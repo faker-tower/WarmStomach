@@ -11,13 +11,13 @@ import com.example.axiang.warmstomach.WarmStomachApplication;
 
 public class SharedPreferencesUtil {
 
-    private static SharedPreferences sp;
+    private static SharedPreferences mSharedPreferences;
 
     public static SharedPreferences getSharedPreferences() {
-        if (sp == null) {
-            sp = PreferenceManager
+        if (mSharedPreferences == null) {
+            mSharedPreferences = PreferenceManager
                     .getDefaultSharedPreferences(WarmStomachApplication.getInstance());
         }
-        return sp;
+        return mSharedPreferences;
     }
 }

@@ -5,5 +5,6 @@ package com.example.axiang.warmstomach.interfaces;
  */
 
 public interface AdColumnOnClickListener {
+
     void onItemClick(int position);
 }

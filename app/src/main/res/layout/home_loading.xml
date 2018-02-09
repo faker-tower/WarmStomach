@@ -4,12 +4,12 @@
     android:background="@color/position_loading_layout_bg">
 
     <com.example.axiang.warmstomach.widget.CyclicalTextView
-        android:id="@+id/cyclical_text_view"
+        android:id="@+id/tv_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textSize="@dimen/sp_16"
-        android:text="@string/waiting_for_positioning" />
+        android:text="@string/positioning" />
 
     <Button
         android:id="@+id/bt_retry"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@string/retry"
         android:layout_centerInParent="true"
-        android:layout_below="@id/cyclical_text_view"
+        android:layout_below="@id/tv_loading"
         android:layout_marginTop="@dimen/dp_10"
         android:textSize="@dimen/sp_12"
         android:visibility="gone"

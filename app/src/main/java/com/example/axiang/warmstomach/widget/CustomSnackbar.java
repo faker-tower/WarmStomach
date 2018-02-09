@@ -2,6 +2,7 @@ package com.example.axiang.warmstomach.widget;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 /**
@@ -10,32 +11,32 @@ import android.widget.TextView;
 
 public class CustomSnackbar {
 
-    private Snackbar snackbar;
+    private Snackbar mSnackbar;
 
     private CustomSnackbar(Builder builder) {
-        snackbar = Snackbar.make(builder.parentView,
+        mSnackbar = Snackbar.make(builder.parentView,
                 builder.messageText,
                 Snackbar.LENGTH_LONG);
-        snackbar.setAction(builder.actionText, builder.listener);
+        mSnackbar.setAction(builder.actionText, builder.listener);
         if (builder.messageColorId != 0) {
-            ((TextView) snackbar.getView()
+            ((TextView) mSnackbar.getView()
                     .findViewById(android.support.design.R.id.snackbar_text))
                     .setTextColor(builder.messageColorId);
         }
         if (builder.actionColorId != 0) {
-            snackbar.setActionTextColor(builder.actionColorId);
+            mSnackbar.setActionTextColor(builder.actionColorId);
         }
     }
 
     public void dismiss() {
-        if (snackbar.isShown()) {
-            snackbar.dismiss();
+        if (mSnackbar.isShown()) {
+            mSnackbar.dismiss();
         }
     }
 
     public void show() {
-        if (!snackbar.isShown()) {
-            snackbar.show();
+        if (!mSnackbar.isShown()) {
+            mSnackbar.show();
         }
     }
 

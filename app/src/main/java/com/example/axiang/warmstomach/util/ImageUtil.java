@@ -3,7 +3,6 @@ package com.example.axiang.warmstomach.util;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -11,23 +10,16 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
-
-import com.example.axiang.warmstomach.C;
 
 import java.io.File;
 import java.io.IOException;
-
-import retrofit2.http.PUT;
 
 /**
  * Created by a2389 on 2017/12/2.
  */
 
 public class ImageUtil {
-
 
     /**
      * 将普通图片加工成圆形图
@@ -130,7 +122,6 @@ public class ImageUtil {
 
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (pxValue / scale  + 0.5f);
+        return (int) (pxValue / scale + 0.5f);
     }
-
 }

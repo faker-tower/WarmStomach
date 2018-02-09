@@ -25,5 +25,7 @@ public interface LoginContract {
         void loginSuccess();
 
         void loginFailed();
+
+        void showNetWorkError();
     }
 }

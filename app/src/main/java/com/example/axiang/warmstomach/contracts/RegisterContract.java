@@ -29,5 +29,7 @@ public interface RegisterContract {
         void registerSuccess();
 
         void RegisterFailed();
+
+        void showNetWorkError();
     }
 }

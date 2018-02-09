@@ -8,28 +8,19 @@ import com.example.axiang.warmstomach.C;
 
 public class CalculateUtil {
 
-    private static double EARTH_RADIUS = 6378.137;
-
-    private static double rad(double d) {
+    private static double rad(double d){
         return d * Math.PI / 180.0;
     }
 
-    // 通过经纬度计算距离
-    public static double getDistance(double goalLongitude, double goalLatitude) {
-        double longitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
-                .getString(C.LONGITUDE, ""));
-        double latitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
-                .getString(C.LATITUDE, ""));
-        double radLat1 = rad(goalLatitude);
-        double radLat2 = rad(latitude);
+    // Google给出根据经纬度计算两点距离的公式,返回单位为米
+    public static double getDistance(double lon1,double lat1,double lon2, double lat2) {
+        double radLat1 = rad(lat1);
+        double radLat2 = rad(lat2);
         double a = radLat1 - radLat2;
-        double b = rad(goalLongitude) - rad(longitude);
+        double b = rad(lon1) - rad(lon2);
         double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
-                + Math.cos(radLat1) * Math.cos(radLat2)
-                * Math.pow(Math.sin(b / 2), 2)));
-        s = s * EARTH_RADIUS;
-        s = Math.round(s * 10000d) / 10000d;
-        s = s*1000;
+                + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2),2)));
+        s = s * C.EARTH_RADIUS;
         return s;
     }
 }

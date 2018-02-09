@@ -22,21 +22,21 @@
 
             <include layout="@layout/toolbar" />
 
-            <FrameLayout
-                android:id="@+id/main_frame_layout"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/main_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
 
         <com.ashokvarma.bottomnavigation.BottomNavigationBar
-            android:id="@+id/buttom_nav_bar"
+            android:id="@+id/main_bottom_nav_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom" />
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/navigation_view"
+        android:id="@+id/main_nav_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"

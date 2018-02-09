@@ -19,11 +19,11 @@ public class OrdersFragment extends Fragment implements OrdersContract.View {
 
     private static final String TAG = OrdersFragment.class.getSimpleName();
 
-    private OrdersContract.Presenter presenter;
+    private OrdersContract.Presenter mPresenter;
 
     @Override
     public void setPresenter(OrdersContract.Presenter presenter) {
-        this.presenter = presenter;
+        this.mPresenter = presenter;
     }
 
     @Override

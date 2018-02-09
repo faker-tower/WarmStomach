@@ -23,22 +23,15 @@ public interface HomeContract {
         void loadSuperStoreData();
         // 加载界面商家数据
         void loadInterfaceStoreData(int offset);
+        // 加载更多商家数据
+        void loadMoreStoreData(List<Store> stores, int offset);
     }
 
     interface View extends BaseView<Presenter> {
-        // 定位错误
-        void showPositionError();
         // 网络异常
         void showNetWorkError();
         // 未知异常
         void showUnknownError();
-        // 定位成功
-        void showPositionSuccess(String county,
-                                 String city,
-                                 String district,
-                                 String street,
-                                 String addrStr,
-                                 String locationDescribe);
         // 更新广告栏
         void updateStoreAd(List<StoreAd> storeAdList);
         // 更新为您优选

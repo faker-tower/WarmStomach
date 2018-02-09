@@ -18,7 +18,7 @@ import com.example.axiang.warmstomach.util.ImageUtil;
 public class CircleImageView extends AppCompatImageView {
 
     // 圆形图的长宽一致
-    private int width;
+    private int mWidth;
 
     public CircleImageView(Context context) {
         super(context);
@@ -35,8 +35,8 @@ public class CircleImageView extends AppCompatImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        width = measureSize(widthMeasureSpec);
-        setMeasuredDimension(width, width);
+        mWidth = measureSize(widthMeasureSpec);
+        setMeasuredDimension(mWidth, mWidth);
     }
 
     // 圆形图长宽一致，统一测试即可
@@ -75,7 +75,7 @@ public class CircleImageView extends AppCompatImageView {
             return;
         }
 
-        canvas.drawBitmap(ImageUtil.getCircleImage(bitmap, width, width / 2),
+        canvas.drawBitmap(ImageUtil.getCircleImage(bitmap, mWidth, mWidth / 2),
                 0,
                 0,
                 null);

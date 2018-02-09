@@ -43,6 +43,11 @@ public class C {
     public static final String LONGITUDE = "longitude";
     // 用户此时所在的纬度
     public static final String LATITUDE = "latitude";
+    // 用户此时所在的地理位置描述
+    public static final String ADDRESS = "address";
+
+    // 赤道半径
+    public static final  double EARTH_RADIUS = 6378137;
 
     // 异常导致重启的当前Fragment
     public static final String CURRENT_ERROR_FRAGMENT = "current_error_fragment";
@@ -54,6 +59,10 @@ public class C {
     // 退出程序
     public static final int EXIT_PROGRAM = 1;
 
+    // 前往登陆注册界面
+    public static final int GO_TOREGISTER_OR_LOGIN = 110;
+    // 是否显示注册界面
+    public static final String IS_SHOW_REGISTER = "is_show_register";
     // 切换到Register界面
     public static final int REPLACE_REGISTER_LAYOUT = 111;
     // 切换到Login界面
@@ -83,6 +92,14 @@ public class C {
     public static final int CAROUSEL_IMAGE_NUMBER = 5;
     // 切换广告栏伦轮播图图片
     public static final int CAROUSEL_IMAGE_REPLACE = 323;
+    // Adapter中代表AdColumn的标识
+    public static final int ADAPTER_AD_COLUMN = 420;
+    // Adapter中代表StoreType的标识
+    public static final int ADAPTER_STORE_TYPE = 421;
+    // Adapter中代表SuperStore的标识
+    public static final int ADAPTER_SUPER_STORE= 422;
+    // Adapter中代表StoreType的标识
+    public static final int ADAPTER_STORE = 423;
 
     // GridView的SimpleAdapter中商店类型图片
     public static final String STORE_TYPE_IMAGE = "store_type_image";

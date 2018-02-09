@@ -14,15 +14,15 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,20 +35,19 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.axiang.warmstomach.ActivityCollector;
 import com.example.axiang.warmstomach.C;
 import com.example.axiang.warmstomach.R;
+import com.example.axiang.warmstomach.adapters.MainViewPagerAdapter;
+import com.example.axiang.warmstomach.contracts.MainContract;
 import com.example.axiang.warmstomach.data.User;
-import com.example.axiang.warmstomach.interfaces.LoginSuccessListener;
-import com.example.axiang.warmstomach.interfaces.PositionChangedListener;
-import com.example.axiang.warmstomach.interfaces.RegisterSuccessListener;
+import com.example.axiang.warmstomach.enums.PositionState;
 import com.example.axiang.warmstomach.presenters.HomePresenter;
-import com.example.axiang.warmstomach.presenters.LoginPresenter;
-import com.example.axiang.warmstomach.presenters.RegisterPresenter;
+import com.example.axiang.warmstomach.presenters.MainPresenter;
 import com.example.axiang.warmstomach.ui.home.fragments.FindFragment;
 import com.example.axiang.warmstomach.ui.home.fragments.HomeFragment;
-import com.example.axiang.warmstomach.ui.home.fragments.LoginFragment;
 import com.example.axiang.warmstomach.ui.home.fragments.OrdersFragment;
-import com.example.axiang.warmstomach.ui.home.fragments.RegisterFragment;
+import com.example.axiang.warmstomach.ui.register_login.RegisterOrLoginActivity;
 import com.example.axiang.warmstomach.util.ImageUtil;
 import com.example.axiang.warmstomach.util.SharedPreferencesUtil;
 import com.example.axiang.warmstomach.util.ToastUtil;
@@ -59,6 +58,9 @@ import com.zxy.tiny.callback.FileCallback;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import butterknife.BindString;
@@ -68,20 +70,19 @@ import butterknife.OnClick;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
-public class MainActivity extends AppCompatActivity implements PositionChangedListener {
-
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class MainActivity extends AppCompatActivity implements MainContract.View {
 
     // 绑定视图
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @BindView(R.id.navigation_view)
+    @BindView(R.id.main_view_pager)
+    ViewPager viewPager;
+    @BindView(R.id.main_nav_view)
     NavigationView navigationView;
-    @BindView(R.id.buttom_nav_bar)
+    @BindView(R.id.main_bottom_nav_bar)
     BottomNavigationBar bottomNavigationBar;
     @BindView(R.id.tool_bar)
     Toolbar toolbar;
@@ -89,6 +90,12 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
     TextView toolbarPosition;
 
     // 绑定String
+    @BindString(R.string.positioning)
+    String positioningText;
+    @BindString(R.string.retry)
+    String retryText;
+    @BindString(R.string.positioning_failed_retry)
+    String positioningFailedRetryText;
     @BindString(R.string.exit_program_3s)
     String exitProgram3sText;
     @BindString(R.string.exit_account)
@@ -96,9 +103,7 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
     @BindString(R.string.exit_program)
     String exitProgramText;
     @BindString(R.string.or)
-    String or;
-    @BindString(R.string.sysnc_failed)
-    String sysncFailedText;
+    String orText;
     @BindString(R.string.need_permission)
     String needPermissionText;
     @BindString(R.string.failed_set_avatar)
@@ -120,134 +125,248 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
     @BindString(R.string.avatar_update_failed)
     String avatarUpdateFailedText;
 
+    private MainContract.Presenter mPresenter;
+    private PositionState mPositionState;
+
     // NavigationView
-    private View navigationHreaderView;
-    private NavHeaderViewHolder navHeaderViewHolder;
-    private CustomPopupWindow popupWindow;
-    private Uri titleImageCachaUri;
-    private File titleImageCutFile;
-    private File titleImageFile;
-    private BmobFile avatarFile;
+    private View mNavHeaderView;
+    private NavHeaderViewHolder mNavHeaderViewHolder;
+    private CustomPopupWindow mPopupWindow;
+    private Uri mTitleImageCacheUri;
+    private File mTitleImageCutFile;
+    private File mTitleImageFile;
+    private BmobFile mAvatarFile;
+
+    // ViewPager
+    private MainViewPagerAdapter mainViewPagerAdapter;
+    private List<Fragment> mFragments;
+    private int mCurrentVgItem = 0;
 
     // 主页面
-    private HomeFragment homeFragment;
-    private HomePresenter homePresenter;
+    private HomeFragment mHomeFragment;
+    private HomePresenter mHomePresenter;
 
     // 订单页面
-    private OrdersFragment ordersFragment;
+    private OrdersFragment mOrdersFragment;
 
     // 发现页面
-    private FindFragment findFragment;
-
-    // 注册界面
-    private RegisterFragment registerFragment;
-    private RegisterPresenter registerPresenter;
-
-    // 登陆界面
-    private LoginFragment loginFragment;
-    private LoginPresenter loginPresenter;
-
-    private int currentErrorBNBItem = 0;
-
-    private int previousBNBItem = 0;
-
-    // 判断当前是否在登陆或注册
-    private boolean isRegister = false;
-    private boolean isLogin = false;
+    private FindFragment mFindFragment;
 
     // 退出程序
-    private long lasExitTime = 0;
-    private Handler exitHandle = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case C.EXIT_PROGRAM_TIMING:
-                    ToastUtil.showToast(exitProgram3sText);
-                    lasExitTime = System.currentTimeMillis();
-                    break;
-                case C.EXIT_PROGRAM:
-                    finish();
-                    System.exit(0);
-                    break;
-            }
-        }
-    };
+    private long mLastExitTime = 0;
+    private ExitHandle mExitHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityCollector.add(this);
         getApplication().setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        mExitHandler = new ExitHandle(this);
         setTransparentStatusBar();
-        initView(savedInstanceState);
+        initView();
+        initFragmentsData(savedInstanceState);
+        initViewPager();
+        initData();
     }
 
-    private void initView(Bundle savedInstanceState) {
-        initToolBar();
-        initNavigationView();
-
-        if (savedInstanceState != null) {
-            currentErrorBNBItem = savedInstanceState.getInt(C.CURRENT_ERROR_BNB_ITEM);
-            previousBNBItem = currentErrorBNBItem;
-            switch (currentErrorBNBItem) {
-                case 0:
-                    homeFragment = (HomeFragment) getSupportFragmentManager()
-                            .getFragment(savedInstanceState,
-                                    C.CURRENT_ERROR_FRAGMENT);
-                    homePresenter = new HomePresenter();
-                    homeFragment.setPresenter(homePresenter);
-                    homePresenter.setView(homeFragment);
-                    break;
-                case 1:
-                    ordersFragment = (OrdersFragment) getSupportFragmentManager()
-                            .getFragment(savedInstanceState,
-                                    C.CURRENT_ERROR_FRAGMENT);
-                    break;
-                case 2:
-                    findFragment = (FindFragment) getSupportFragmentManager()
-                            .getFragment(savedInstanceState,
-                                    C.CURRENT_ERROR_FRAGMENT);
-                    break;
-                default:
-                    break;
-            }
+    private void initData() {
+        setPresenter(new MainPresenter());
+        mPresenter.setView(this);
+        mPresenter.syncUserData();
+        if (!"".equals(SharedPreferencesUtil.getSharedPreferences()
+                .getString(C.LONGITUDE, ""))
+                && !"".equals(SharedPreferencesUtil.getSharedPreferences()
+                .getString(C.LATITUDE, ""))
+                && !"".equals(SharedPreferencesUtil.getSharedPreferences()
+                .getString(C.ADDRESS, ""))) {
+            onPositionSuccess(SharedPreferencesUtil.getSharedPreferences()
+                    .getString(C.ADDRESS, ""));
         } else {
-            homeFragment = new HomeFragment();
-            homePresenter = new HomePresenter();
-            homeFragment.setPresenter(homePresenter);
-            homePresenter.setView(homeFragment);
+            mPresenter.start();
         }
-
-        initContentView();
-        initUserData();
-        mainFragmentReplace(currentErrorBNBItem);
     }
 
-    // 初始化标题栏
-    private void initToolBar() {
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                toolbar,
-                R.string.drawer_layout_open,
-                R.string.drawer_layout_close);
-        toggle.syncState();
-        drawerLayout.addDrawerListener(toggle);
+    public MainContract.Presenter getPresenter() {
+        return mPresenter;
     }
 
     @Override
-    public void onPositionChanged(String text) {
-        toolbarPosition.setText(text);
+    public void setPresenter(MainContract.Presenter presenter) {
+        this.mPresenter = presenter;
+    }
+
+    @Override
+    public void onPositioning() {
+        mPositionState = PositionState.positioning;
+        toolbarPosition.setText(positioningText);
+        if (viewPager.getCurrentItem() == 0) {
+            mHomeFragment.getOnPositionStatedListener().onPositioning();
+        }
+    }
+
+    @Override
+    public void onPositionSuccess(String address) {
+        mPositionState = PositionState.positionSuccess;
+        toolbarPosition.setText(address);
+        if (viewPager.getCurrentItem() == 0) {
+            mHomeFragment.getOnPositionStatedListener().onPosiitonSuccess();
+        }
+    }
+
+    @Override
+    public void onPositionFailed() {
+        mPositionState = PositionState.positionFailed;
+        ToastUtil.showToast(positioningFailedRetryText);
+        toolbarPosition.setText(retryText);
+        if (viewPager.getCurrentItem() == 0) {
+            mHomeFragment.getOnPositionStatedListener().onPositionFailed();
+        }
+    }
+
+    @Override
+    public void syncUserDataSuccess() {
+        mNavHeaderViewHolder.register.setVisibility(View.GONE);
+        mNavHeaderViewHolder.login.setVisibility(View.GONE);
+        User user = BmobUser.getCurrentUser(User.class);
+        mNavHeaderViewHolder.or.setText(user.getName());
+        SharedPreferencesUtil.getSharedPreferences()
+                .edit()
+                .putString(C.LAST_LOGIN_PHONE_NUMBER, user.getMobilePhoneNumber())
+                .commit();
+        if (user.getAvatar() != null) {
+            Glide.with(this)
+                    .load(user.getAvatar())
+                    .apply(new RequestOptions().centerCrop()
+                            .placeholder(R.drawable.image_loading)
+                            .error(R.drawable.error))
+                    .into(mNavHeaderViewHolder.navHeaderImage);
+        } else {
+            Glide.with(this)
+                    .load(R.drawable.title_image_no_login)
+                    .into(mNavHeaderViewHolder.navHeaderImage);
+        }
+    }
+
+    @Override
+    public void syncUserDataFailed() {
+        resetLogin();
+    }
+
+    private void initViewPager() {
+        viewPager.setOffscreenPageLimit(3);
+        mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), mFragments);
+        viewPager.setAdapter(mainViewPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position,
+                                       float positionOffset,
+                                       int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    switch (mPositionState) {
+                        case positioning:
+                            mHomeFragment.getOnPositionStatedListener().onPositioning();
+                            break;
+                        case positionFailed:
+                            mHomeFragment.getOnPositionStatedListener().onPositionFailed();
+                            break;
+                        case positionSuccess:
+                            mHomeFragment.getOnPositionStatedListener().onPosiitonSuccess();
+                            break;
+                    }
+                }
+                mCurrentVgItem = position;
+                bottomNavigationBar.selectTab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        viewPager.setCurrentItem(mCurrentVgItem);
+    }
+
+    private void initFragmentsData(Bundle savedInstanceState) {
+        mFragments = new ArrayList<>();
+        if (savedInstanceState != null) {
+            mCurrentVgItem = savedInstanceState.getInt(C.CURRENT_ERROR_BNB_ITEM);
+            switch (mCurrentVgItem) {
+                case 0:
+                    initHomeFragment(savedInstanceState);
+                    initOrdersFragment(null);
+                    initFindFragment(null);
+                    break;
+                case 1:
+                    initHomeFragment(null);
+                    initOrdersFragment(savedInstanceState);
+                    initFindFragment(null);
+                    break;
+                case 2:
+                    initHomeFragment(null);
+                    initOrdersFragment(null);
+                    initFindFragment(savedInstanceState);
+                    break;
+            }
+        } else {
+            initHomeFragment(null);
+            initOrdersFragment(null);
+            initFindFragment(null);
+        }
+        mFragments.add(mHomeFragment);
+        mFragments.add(mOrdersFragment);
+        mFragments.add(mFindFragment);
+    }
+
+    @Override
+    public void initView() {
+        initToolBar();
+        initNavigationView();
+        initContentView();
+    }
+
+    private void initContentView() {
+        bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED)
+                // 设置点击之后会扩散的背景的特效
+                .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE)
+                // 设置选中的颜色
+                .setActiveColor(R.color.colorPrimary)
+                // 设置未选中的颜色
+                .setInActiveColor(R.color.bottom_nav_bar_no_select)
+                .addItem(new BottomNavigationItem(R.drawable.home, R.string.home))
+                .addItem(new BottomNavigationItem(R.drawable.orders, R.string.orders))
+                .addItem(new BottomNavigationItem(R.drawable.find, R.string.find))
+                // 默认显示第一个，异常则显示异常那个
+                .setFirstSelectedPosition(mCurrentVgItem)
+                // 初始化
+                .initialise();
+        bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(int position) {
+                mCurrentVgItem = position;
+                viewPager.setCurrentItem(position);
+            }
+
+            @Override
+            public void onTabUnselected(int position) {
+            }
+
+            @Override
+            public void onTabReselected(int position) {
+            }
+        });
     }
 
     // 初始化NavigationView
     private void initNavigationView() {
         navigationView.setItemIconTintList(null);
-        navigationHreaderView = navigationView.getHeaderView(0);
-        navHeaderViewHolder = new NavHeaderViewHolder(navigationHreaderView);
-        navigationView.setNavigationItemSelectedListener (
+        mNavHeaderView = navigationView.getHeaderView(0);
+        navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -285,207 +404,105 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
                         return true;
                     }
                 });
-    }
 
-    // 显示注册界面
-    private void addRegisterToShow() {
-        if (registerFragment == null) {
-            registerFragment = new RegisterFragment();
-        }
-        if (registerPresenter == null) {
-            registerPresenter = new RegisterPresenter();
-        }
-        registerPresenter.setView(registerFragment);
-        registerFragment.setPresenter(registerPresenter);
-        registerFragment.setListener(new RegisterSuccessListener() {
+        mNavHeaderViewHolder = new NavHeaderViewHolder(mNavHeaderView);
+        mNavHeaderViewHolder.register.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void success() {
-                registerOrLoginSuccess();
-            }
-
-            @Override
-            public void goToLogin() {
-                addLoginToShow();
+            public void onClick(View v) {
+                Intent registerIntent = new Intent
+                        (MainActivity.this, RegisterOrLoginActivity.class);
+                registerIntent.putExtra(C.IS_SHOW_REGISTER, true);
+                startActivityForResult(registerIntent, C.GO_TOREGISTER_OR_LOGIN);
+                drawerLayout.closeDrawer(Gravity.START);
             }
         });
-        mainFragmentReplace(C.REPLACE_REGISTER_LAYOUT);
-    }
-
-    // 显示登陆界面
-    private void addLoginToShow() {
-        if (loginFragment == null) {
-            loginFragment = new LoginFragment();
-        }
-        if (loginPresenter == null) {
-            loginPresenter = new LoginPresenter();
-        }
-        loginPresenter.setView(loginFragment);
-        loginFragment.setPresenter(loginPresenter);
-        loginFragment.setListener(new LoginSuccessListener() {
+        mNavHeaderViewHolder.login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void success() {
-                registerOrLoginSuccess();
+            public void onClick(View v) {
+                Intent loginIntent = new Intent
+                        (MainActivity.this, RegisterOrLoginActivity.class);
+                loginIntent.putExtra(C.IS_SHOW_REGISTER, false);
+                startActivityForResult(loginIntent, C.GO_TOREGISTER_OR_LOGIN);
+                drawerLayout.closeDrawer(Gravity.START);
             }
         });
-        mainFragmentReplace(C.REPLACE_LOGIN_LAYOUT);
+        mNavHeaderViewHolder.navHeaderImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            C.REQUEST_PREMISSION_EXTERNAL_STORAGE);
+                } else {
+                    if (BmobUser.getCurrentUser(User.class) == null) {
+                        ToastUtil.showToast(failedSetAvatarText);
+                        return;
+                    } else {
+                        showDialogBox(R.drawable.carema,
+                                takeAPhotoText,
+                                R.drawable.album,
+                                albumSelectionText);
+                    }
+                }
+            }
+        });
     }
 
-    // 登陆或者注册成功回调
-    private void registerOrLoginSuccess() {
-        successUpdateLayout();
-        mainFragmentReplace(bottomNavigationBar.getCurrentSelectedPosition());
+    private void initToolBar() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                drawerLayout,
+                toolbar,
+                R.string.drawer_layout_open,
+                R.string.drawer_layout_close);
+        toggle.syncState();
+        drawerLayout.addDrawerListener(toggle);
     }
 
-    // 登陆或者注册成功更新界面显示
-    private void successUpdateLayout() {
-        navHeaderViewHolder.register.setVisibility(View.GONE);
-        navHeaderViewHolder.login.setVisibility(View.GONE);
-        User user = BmobUser.getCurrentUser(User.class);
-        navHeaderViewHolder.or.setText(user.getName());
-        SharedPreferencesUtil.getSharedPreferences()
-                .edit()
-                .putString(C.LAST_LOGIN_PHONE_NUMBER, user.getMobilePhoneNumber());
-        if (user.getAvatar() != null) {
-            Glide.with(this)
-                    .load(user.getAvatar())
-                    .apply(new RequestOptions().centerCrop()
-                            .placeholder(R.drawable.image_loading)
-                            .error(R.drawable.error))
-                    .into(navHeaderViewHolder.navHeaderImage);
+    private void initHomeFragment(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            mHomeFragment = new HomeFragment();
         } else {
-            Glide.with(this)
-                    .load(R.drawable.title_image_no_login)
-                    .into(navHeaderViewHolder.navHeaderImage);
+            mHomeFragment = (HomeFragment) getSupportFragmentManager()
+                    .getFragment(savedInstanceState,
+                            C.CURRENT_ERROR_FRAGMENT);
+
+        }
+        mHomePresenter = new HomePresenter();
+        mHomeFragment.setPresenter(mHomePresenter);
+        mHomePresenter.setView(mHomeFragment);
+    }
+
+    private void initOrdersFragment(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            mOrdersFragment = new OrdersFragment();
+        } else {
+            mOrdersFragment = (OrdersFragment) getSupportFragmentManager()
+                    .getFragment(savedInstanceState,
+                            C.CURRENT_ERROR_FRAGMENT);
+
         }
     }
 
-    // 退出登陆或者没有登陆的时候，界面重置为初始状态
-    private void resetLogin() {
-        User user = BmobUser.getCurrentUser(User.class);
-        if (user != null) {
-            BmobUser.logOut();
-        }
-        navHeaderViewHolder.register.setVisibility(View.VISIBLE);
-        navHeaderViewHolder.login.setVisibility(View.VISIBLE);
-        navHeaderViewHolder.or.setText(or);
-        Glide.with(this)
-                .load(R.drawable.title_image_no_login)
-                .into(navHeaderViewHolder.navHeaderImage);
-    }
+    private void initFindFragment(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            mFindFragment = new FindFragment();
+        } else {
+            mFindFragment = (FindFragment) getSupportFragmentManager()
+                    .getFragment(savedInstanceState,
+                            C.CURRENT_ERROR_FRAGMENT);
 
-    // 切换界面主Fragment布局
-    private void mainFragmentReplace(int itemNumber) {
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction();
-        switch (itemNumber) {
-            case 0:
-                transaction.replace(R.id.main_frame_layout, homeFragment);
-                break;
-            case 1:
-                transaction.replace(R.id.main_frame_layout, ordersFragment);
-                break;
-            case 2:
-                transaction.replace(R.id.main_frame_layout, findFragment);
-                break;
-            case C.REPLACE_REGISTER_LAYOUT:
-                transaction.replace(R.id.main_frame_layout, registerFragment);
-                if (!isLogin && !isRegister) {
-                    transaction.addToBackStack(null);
-                }
-                break;
-            case C.REPLACE_LOGIN_LAYOUT:
-                transaction.replace(R.id.main_frame_layout, loginFragment);
-                if (!isLogin && !isRegister) {
-                    transaction.addToBackStack(null);
-                }
-        }
-        transaction.commit();
-        switch (itemNumber) {
-            case C.REPLACE_REGISTER_LAYOUT:
-                isRegister = true;
-                isLogin = false;
-                break;
-            case C.REPLACE_LOGIN_LAYOUT:
-                isRegister = false;
-                isLogin = true;
-                break;
-            default:
-                isRegister = false;
-                isLogin = false;
         }
     }
 
-    // 初始化主内容布局区域
-    private void initContentView() {
-        bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED)
-                // 设置点击之后会扩散的背景的特效
-                .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE)
-                // 设置选中的颜色
-                .setActiveColor(R.color.colorPrimary)
-                // 设置未选中的颜色
-                .setInActiveColor(R.color.bottom_nav_bar_no_select)
-                .addItem(new BottomNavigationItem(R.drawable.home, R.string.home))
-                .addItem(new BottomNavigationItem(R.drawable.orders, R.string.orders))
-                .addItem(new BottomNavigationItem(R.drawable.find, R.string.find))
-                // 默认显示第一个，异常则显示异常那个
-                .setFirstSelectedPosition(currentErrorBNBItem)
-                // 初始化
-                .initialise();
-        bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(int position) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                if (previousBNBItem < position) {
-                    transaction.setCustomAnimations(R.anim.fragment_replace_right_in,
-                            R.anim.fragment_replace_left_out);
-                } else if (previousBNBItem > position) {
-                    transaction.setCustomAnimations(R.anim.fragment_replace_left_in,
-                            R.anim.fragment_replace_right_out);
-                }
-                previousBNBItem = position;
-                switch (position) {
-                    case 0:
-                        if (homeFragment == null) {
-                            homeFragment = new HomeFragment();
-                            if (homePresenter == null) {
-                                homePresenter = new HomePresenter();
-                            }
-                            homeFragment.setPresenter(homePresenter);
-                            homePresenter.setView(homeFragment);
-                        }
-                        currentErrorBNBItem = 0;
-                        transaction.replace(R.id.main_frame_layout, homeFragment);
-                        break;
-                    case 1:
-                        if (ordersFragment == null) {
-                            ordersFragment = new OrdersFragment();
-                        }
-                        currentErrorBNBItem = 1;
-                        transaction.replace(R.id.main_frame_layout, ordersFragment);
-                        break;
-                    case 2:
-                        if (findFragment == null) {
-                            findFragment = new FindFragment();
-                        }
-                        currentErrorBNBItem = 2;
-                        transaction.replace(R.id.main_frame_layout, findFragment);
-                        break;
-                    default:
-                        break;
-                }
-                transaction.commit();
-                isRegister = false;
-                isLogin = false;
-            }
-
-            @Override
-            public void onTabUnselected(int position) {
-            }
-
-            @Override
-            public void onTabReselected(int position) {
-            }
-        });
+    @OnClick(R.id.toolbar_position)
+    public void toolbarPositionClicked() {
+        if (retryText.equals(toolbarPosition.getText().toString())) {
+            mPresenter.start();
+        }
     }
 
     // 设置沉浸式状态栏
@@ -506,69 +523,44 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (!isRegister && !isLogin) {
-            outState.putInt(C.CURRENT_ERROR_BNB_ITEM, currentErrorBNBItem);
-            if (currentErrorBNBItem == 0) {
-                getSupportFragmentManager().putFragment(outState,
-                        C.CURRENT_ERROR_FRAGMENT,
-                        homeFragment);
-            } else if (currentErrorBNBItem == 1) {
-                getSupportFragmentManager().putFragment(outState,
-                        C.CURRENT_ERROR_FRAGMENT,
-                        ordersFragment);
-            } else if (currentErrorBNBItem == 2) {
-                getSupportFragmentManager().putFragment(outState,
-                        C.CURRENT_ERROR_FRAGMENT,
-                        findFragment);
-            }
-        } else {
-            outState.clear();
-            outState = null;
+        outState.putInt(C.CURRENT_ERROR_BNB_ITEM, mCurrentVgItem);
+        if (mCurrentVgItem == 0) {
+            getSupportFragmentManager().putFragment(outState,
+                    C.CURRENT_ERROR_FRAGMENT,
+                    mHomeFragment);
+        } else if (mCurrentVgItem == 1) {
+            getSupportFragmentManager().putFragment(outState,
+                    C.CURRENT_ERROR_FRAGMENT,
+                    mOrdersFragment);
+        } else if (mCurrentVgItem == 2) {
+            getSupportFragmentManager().putFragment(outState,
+                    C.CURRENT_ERROR_FRAGMENT,
+                    mFindFragment);
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    // 初始化用户数据更新同步
-    private void initUserData() {
-        if (BmobUser.getCurrentUser(User.class) != null) {
-            BmobUser.fetchUserJsonInfo(new FetchUserInfoListener<String>() {
-                @Override
-                public void done(String s, BmobException e) {
-                    if (e != null) {
-                        ToastUtil.showToast(sysncFailedText);
-                        resetLogin();
-                    } else {
-                        successUpdateLayout();
-                    }
-                }
-            });
-        } else {
-            Glide.with(this)
-                    .load(R.drawable.title_image_no_login)
-                    .into(navHeaderViewHolder.navHeaderImage);
-        }
+    // 退出登陆或者没有登陆的时候，界面重置为初始状态
+    private void resetLogin() {
+        mNavHeaderViewHolder.register.setVisibility(View.VISIBLE);
+        mNavHeaderViewHolder.login.setVisibility(View.VISIBLE);
+        mNavHeaderViewHolder.or.setText(orText);
+        Glide.with(this)
+                .load(R.drawable.title_image_no_login)
+                .into(mNavHeaderViewHolder.navHeaderImage);
     }
 
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
             drawerLayout.closeDrawer(Gravity.START);
-        } else if (!isRegister && !isLogin) {
-            Message msg = new Message();
-            if (System.currentTimeMillis() - lasExitTime <= 3000) {
+        } else {
+            Message msg = mExitHandler.obtainMessage();
+            if (System.currentTimeMillis() - mLastExitTime <= 3000) {
                 msg.what = C.EXIT_PROGRAM;
             } else {
                 msg.what = C.EXIT_PROGRAM_TIMING;
             }
-            exitHandle.handleMessage(msg);
-        } else {
-            isRegister = false;
-            isLogin = false;
-            mainFragmentReplace(bottomNavigationBar.getCurrentSelectedPosition());
+            mExitHandler.handleMessage(msg);
         }
     }
 
@@ -580,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
         WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(metrics);
-        popupWindow = new CustomPopupWindow.Builder()
+        mPopupWindow = new CustomPopupWindow.Builder()
                 .setContext(this)
                 .setContentViewId(R.layout.popup_layout)
                 .setWidth(4 * metrics.widthPixels / 5)
@@ -596,27 +588,30 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
                 .build()
                 // 设置对于父控件的布局位置
                 .showAtLocation(R.layout.activity_main, Gravity.CENTER, 0, 0);
-        ((ImageView) popupWindow.getChildView(R.id.first_image)).setImageResource(firstImageId);
-        ((TextView) popupWindow.getChildView(R.id.first_text)).setText(firstText);
-        ((ImageView) popupWindow.getChildView(R.id.second_image)).setImageResource(secondImageId);
-        ((TextView) popupWindow.getChildView(R.id.second_text)).setText(secondText);
+        ((ImageView) mPopupWindow.getChildView(R.id.first_image)).setImageResource(firstImageId);
+        ((TextView) mPopupWindow.getChildView(R.id.first_text)).setText(firstText);
+        ((ImageView) mPopupWindow.getChildView(R.id.second_image)).setImageResource(secondImageId);
+        ((TextView) mPopupWindow.getChildView(R.id.second_text)).setText(secondText);
         if (exitAccountText.equals(firstText)) {
-            popupWindow.setChildOnCilickListener(R.id.first_layout, new View.OnClickListener() {
+            mPopupWindow.setChildOnCilickListener(R.id.first_layout, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    User user = BmobUser.getCurrentUser(User.class);
+                    if (user != null) {
+                        BmobUser.logOut();
+                    }
                     resetLogin();
-                    popupWindow.onDismiss();
+                    mPopupWindow.onDismiss();
                 }
             });
-            popupWindow.setChildOnCilickListener(R.id.second_layout, new View.OnClickListener() {
+            mPopupWindow.setChildOnCilickListener(R.id.second_layout, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
-                    System.exit(0);
+                    mExitHandler.sendEmptyMessage(C.EXIT_PROGRAM);
                 }
             });
         } else {
-            popupWindow.setChildOnCilickListener(R.id.first_layout, new View.OnClickListener() {
+            mPopupWindow.setChildOnCilickListener(R.id.first_layout, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (ContextCompat.checkSelfPermission(MainActivity.this,
@@ -629,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
                     }
                 }
             });
-            popupWindow.setChildOnCilickListener(R.id.second_layout, new View.OnClickListener() {
+            mPopupWindow.setChildOnCilickListener(R.id.second_layout, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // 从相册中选取图片
@@ -673,21 +668,29 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case C.GO_TOREGISTER_OR_LOGIN:
+                if (BmobUser.getCurrentUser(User.class) != null) {
+                    syncUserDataSuccess();
+                }
+                break;
             case C.REQUEST_IMAGE_FROM_CAREMA:
+                if (data == null) {
+                    return;
+                }
                 if (resultCode != RESULT_OK) {
                     ToastUtil.showToast(failedGetPictureText);
                 } else {
-                    titleImageCutFile = new File(getExternalCacheDir().getPath(),
+                    mTitleImageCutFile = new File(getExternalCacheDir().getPath(),
                             C.TITLE_IMAGE_CUT_NAME);
                     // 开启裁剪
                     Intent intent = null;
                     try {
-                        intent = ImageUtil.cutForPhoto(titleImageCachaUri,
+                        intent = ImageUtil.cutForPhoto(mTitleImageCacheUri,
                                 ImageUtil.px2dip(this,
-                                        navHeaderViewHolder.navHeaderImage.getWidth()),
+                                        mNavHeaderViewHolder.navHeaderImage.getWidth()),
                                 ImageUtil.px2dip(this,
-                                        navHeaderViewHolder.navHeaderImage.getHeight()),
-                                titleImageCutFile);
+                                        mNavHeaderViewHolder.navHeaderImage.getHeight()),
+                                mTitleImageCutFile);
                     } catch (IOException e) {
                         ToastUtil.showToast(createImageFailedText);
                     }
@@ -697,19 +700,22 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
                 }
                 break;
             case C.REQUEST_IMAGE_FROM_PICK:
+                if (data == null) {
+                    return;
+                }
                 if (resultCode != RESULT_OK) {
                     ToastUtil.showToast(failedGetPictureText);
                 } else {
-                    titleImageCutFile = new File(getExternalCacheDir().getPath(),
+                    mTitleImageCutFile = new File(getExternalCacheDir().getPath(),
                             C.TITLE_IMAGE_CUT_NAME);
                     // 开启裁剪
                     try {
                         Intent intent = ImageUtil.cutForPhoto(data.getData(),
                                 ImageUtil.px2dip(this,
-                                        navHeaderViewHolder.navHeaderImage.getWidth()),
+                                        mNavHeaderViewHolder.navHeaderImage.getWidth()),
                                 ImageUtil.px2dip(this,
-                                        navHeaderViewHolder.navHeaderImage.getHeight()),
-                                titleImageCutFile);
+                                        mNavHeaderViewHolder.navHeaderImage.getHeight()),
+                                mTitleImageCutFile);
                         startActivityForResult(intent, C.REQUEST_PHOTO_CROP);
                     } catch (IOException e) {
                         ToastUtil.showToast(createImageFailedText);
@@ -721,24 +727,24 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
                 if (resultCode != RESULT_OK) {
                     ToastUtil.showToast(cropPictureFailedText);
                 }
-                if (titleImageCutFile.exists()) {
+                if (mTitleImageCutFile.exists()) {
                     // 压缩图片
-                    titleImageFile = new File(getExternalCacheDir().getPath(),
+                    mTitleImageFile = new File(getExternalCacheDir().getPath(),
                             "warm_stomacha_" + new Random().nextInt(100)
                                     + "_" + System.currentTimeMillis() + ".png");
-                    if (titleImageFile.exists()) {
-                        titleImageFile.delete();
+                    if (mTitleImageFile.exists()) {
+                        mTitleImageFile.delete();
                     }
                     try {
-                        titleImageFile.createNewFile();
+                        mTitleImageFile.createNewFile();
                     } catch (IOException e) {
                         ToastUtil.showToast(createImageFailedText);
                     }
                     Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
                     options.isKeepSampling = true;
-                    options.outfile = titleImageFile.getAbsolutePath();
+                    options.outfile = mTitleImageFile.getAbsolutePath();
                     Tiny.getInstance()
-                            .source(titleImageCutFile)
+                            .source(mTitleImageCutFile)
                             .asFile()
                             .withOptions(options)
                             .compress(new FileCallback() {
@@ -747,8 +753,8 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
                                                      String outfile,
                                                      Throwable t) {
                                     if (isSuccess) {
-                                        if (titleImageCutFile.exists()) {
-                                            titleImageCutFile.delete();
+                                        if (mTitleImageCutFile.exists()) {
+                                            mTitleImageCutFile.delete();
                                         }
                                         //显示文件
                                         Glide.with(MainActivity.this)
@@ -756,7 +762,7 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
                                                 .apply(new RequestOptions().centerCrop()
                                                         .placeholder(R.drawable.image_loading)
                                                         .error(R.drawable.error))
-                                                .into(navHeaderViewHolder.navHeaderImage);
+                                                .into(mNavHeaderViewHolder.navHeaderImage);
                                         updateUserTitleImage(outfile);
                                     } else {
                                         ToastUtil.showToast(compressionAvatarFailedText);
@@ -772,8 +778,8 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
 
     // 更新用户头像
     private void updateUserTitleImage(String outFile) {
-        avatarFile = new BmobFile(new File(outFile));
-        avatarFile.uploadblock(new UploadFileListener() {
+        mAvatarFile = new BmobFile(new File(outFile));
+        mAvatarFile.uploadblock(new UploadFileListener() {
             @Override
             public void done(BmobException e) {
                 if (e != null) {
@@ -781,13 +787,13 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
                 } else {
                     User user = BmobUser.getCurrentUser(User.class);
                     User updateUser = new User();
-                    updateUser.setAvatar(avatarFile.getFileUrl());
+                    updateUser.setAvatar(mAvatarFile.getFileUrl());
                     updateUser.update(user.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
                                 User user = BmobUser.getCurrentUser(User.class);
-                                user.setAvatar(avatarFile.getFileUrl());
+                                user.setAvatar(mAvatarFile.getFileUrl());
                                 ToastUtil.showToast(avatarUpdatedSuccessfulText);
                             } else {
                                 ToastUtil.showToast(avatarUpdateFailedText);
@@ -814,29 +820,28 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
         }
         // 适配7.0以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            titleImageCachaUri = FileProvider.getUriForFile(this,
+            mTitleImageCacheUri = FileProvider.getUriForFile(this,
                     "com.axiang.fileprovider",
                     outputFile);
         } else {
-            titleImageCachaUri = Uri.fromFile(outputFile);
+            mTitleImageCacheUri = Uri.fromFile(outputFile);
         }
         // 启动相机程序
         Intent caremaIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        caremaIntent.putExtra(MediaStore.EXTRA_OUTPUT, titleImageCachaUri);
+        caremaIntent.putExtra(MediaStore.EXTRA_OUTPUT, mTitleImageCacheUri);
         startActivityForResult(caremaIntent, C.REQUEST_IMAGE_FROM_CAREMA);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SharedPreferencesUtil.getSharedPreferences().edit()
-                .putString(C.LONGITUDE, "")
-                .putString(C.LATITUDE, "")
-                .commit();
+        ActivityCollector.remove(this);
+        mExitHandler = null;
+        mNavHeaderViewHolder = null;
     }
 
     // NavigationView的头部布局的ViewHolder
-    class NavHeaderViewHolder {
+    static class NavHeaderViewHolder {
 
         @BindView(R.id.nav_header_image)
         CircleImageView navHeaderImage;
@@ -850,42 +855,29 @@ public class MainActivity extends AppCompatActivity implements PositionChangedLi
         NavHeaderViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
 
-        @OnClick(R.id.register)
-        public void registerClicked(View view) {
-            drawerLayout.closeDrawer(Gravity.START);
-            if (isRegister) {
-                return;
-            }
-            addRegisterToShow();
+    static class ExitHandle extends Handler {
+
+        private WeakReference<MainActivity> activityReference;
+
+        public ExitHandle(MainActivity activity) {
+            super();
+            activityReference = new WeakReference<MainActivity>(activity);
         }
 
-        @OnClick(R.id.login)
-        public void loginClicked(View view) {
-            drawerLayout.closeDrawer(Gravity.START);
-            if (isLogin) {
-                return;
-            }
-            addLoginToShow();
-        }
-
-        @OnClick(R.id.nav_header_image)
-        public void navHeaderImageClicked(View view) {
-            if (ContextCompat.checkSelfPermission(MainActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        C.REQUEST_PREMISSION_EXTERNAL_STORAGE);
-            } else {
-                if (BmobUser.getCurrentUser(User.class) == null) {
-                    ToastUtil.showToast(failedSetAvatarText);
-                    return;
-                } else {
-                    showDialogBox(R.drawable.carema,
-                            takeAPhotoText,
-                            R.drawable.album,
-                            albumSelectionText);
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (activityReference.get() != null) {
+                switch (msg.what) {
+                    case C.EXIT_PROGRAM_TIMING:
+                        ToastUtil.showToast(activityReference.get().exitProgram3sText);
+                        activityReference.get().mLastExitTime = System.currentTimeMillis();
+                        break;
+                    case C.EXIT_PROGRAM:
+                        ActivityCollector.finishAll();
+                        break;
                 }
             }
         }
