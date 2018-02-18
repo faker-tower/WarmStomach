@@ -1,9 +1,12 @@
 package com.example.axiang.warmstomach.widget;
 
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import com.example.axiang.warmstomach.R;
 
 /**
  * Created by a2389 on 2017/12/24.
@@ -17,6 +20,7 @@ public class CustomSnackbar {
         mSnackbar = Snackbar.make(builder.parentView,
                 builder.messageText,
                 Snackbar.LENGTH_LONG);
+        mSnackbar.getView().setBackgroundColor(Color.WHITE);
         mSnackbar.setAction(builder.actionText, builder.listener);
         if (builder.messageColorId != 0) {
             ((TextView) mSnackbar.getView()

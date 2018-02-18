@@ -3,7 +3,8 @@
     android:id="@+id/register_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.register_login.fragments.RegisterFragment">
+    tools:context=".ui.register_login.fragments.RegisterFragment"
+    tools:ignore="ContentDescription">
 
     <EditText
         android:id="@+id/register_input_phone_et"
@@ -20,8 +21,8 @@
         android:id="@+id/register_input_vertify_et"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
-        android:layout_marginRight="@dimen/dp_120"
-        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_120"
+        android:layout_marginStart="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_below="@id/register_input_phone_et"
         android:textSize="@dimen/sp_16"
@@ -34,9 +35,9 @@
         android:layout_width="@dimen/dp_100"
         android:layout_height="@dimen/dp_48"
         android:text="@string/get_verification"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:gravity="center"
-        android:layout_marginRight="@dimen/dp_120"
+        android:layout_marginEnd="@dimen/dp_120"
         android:layout_marginTop="@dimen/dp_10"
         android:textSize="@dimen/sp_12"
         android:layout_below="@id/register_input_phone_et"
@@ -63,14 +64,14 @@
         android:layout_height="wrap_content"
         android:src="@drawable/password_visibility_off"
         android:layout_alignTop="@id/register_password_et"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/dp_10" />
 
     <TextView
         android:id="@+id/password_length_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginStart="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_below="@id/register_password_et"
         android:textSize="@dimen/sp_12"

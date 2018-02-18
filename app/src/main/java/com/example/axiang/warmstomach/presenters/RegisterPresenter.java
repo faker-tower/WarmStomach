@@ -35,24 +35,24 @@ public class RegisterPresenter implements RegisterContract.Presenter {
     @Override
     public boolean phoneNumberIsRegistered(String phoneNumber) {
         BmobQuery<User> userBmobQuery = new BmobQuery<>();
-        userBmobQuery.addWhereEqualTo(C.MOBILE_PHONE_NUMBER, phoneNumber);
-        userBmobQuery.setLimit(1);
-        userBmobQuery.setSkip(0);
-        userBmobQuery.findObjects(new FindListener<User>() {
-            @Override
-            public void done(List<User> list, BmobException e) {
-                if (e == null && !list.isEmpty()) {
-                    phoneNumberExist = true;
-                }
-            }
-        });
+        userBmobQuery.addWhereEqualTo(C.MOBILE_PHONE_NUMBER, phoneNumber)
+                .setLimit(1)
+                .setSkip(0)
+                .findObjects(new FindListener<User>() {
+                    @Override
+                    public void done(List<User> list, BmobException e) {
+                        if (e == null && !list.isEmpty()) {
+                            phoneNumberExist = true;
+                        }
+                    }
+                });
         return phoneNumberExist;
     }
 
     @Override
     public void saveData(String name,
-                            String password,
-                            String mobilePhoneNumber) {
+                         String password,
+                         String mobilePhoneNumber) {
         // 上传到Bmob数据库
         User user = new User();
         user.setUsername(mobilePhoneNumber);

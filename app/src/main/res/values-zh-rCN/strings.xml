@@ -93,4 +93,16 @@
     <string name="search_business">搜索商家中</string>
     <string name="no_data">没有数据了</string>
     <string name="search_business_failed">搜索商家失败</string>
+    
+    <!--StoreActivity-->
+    <string name="announcement">公告：</string>
+    <string name="address">地址：</string>
+    <string name="collect">收藏</string>
+    <string name="call">呼叫</string>
+    <string name="get_business_phone_error">无法获取到商家电话</string>
+    <string name="like">赞</string>
+    <string name="to_settle">去结算</string>
+    <string name="lack">差</string>
+    <string name="to_send">起送</string>
+    <string name="clear_shopping_cart">清空购物车</string>
 </resources>

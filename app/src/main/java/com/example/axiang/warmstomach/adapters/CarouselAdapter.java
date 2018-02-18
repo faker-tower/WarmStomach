@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.axiang.warmstomach.R;
 import com.example.axiang.warmstomach.interfaces.AdColumnOnClickListener;
+import com.example.axiang.warmstomach.interfaces.OnAdColumnItemListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class CarouselAdapter extends PagerAdapter {
 
     private Context mContext;
     private List<String> mImageUrls;
-    private AdColumnOnClickListener mListener;
+    private OnAdColumnItemListener mListener;
 
     public CarouselAdapter(Context context, @NonNull List<String> imageUrls) {
         super();
@@ -34,7 +35,7 @@ public class CarouselAdapter extends PagerAdapter {
         this.mImageUrls = imageUrls;
     }
 
-    public void setListener(AdColumnOnClickListener listener) {
+    public void setListener(OnAdColumnItemListener listener) {
         this.mListener = listener;
     }
 
@@ -55,14 +56,14 @@ public class CarouselAdapter extends PagerAdapter {
                         .placeholder(R.color.position_loading_layout_bg)
                         .error(R.color.net_work_error))
                 .into(adsPicture);
-        if (mListener != null) {
-            adsPicture.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mListener.onItemClick(position % mImageUrls.size());
+        adsPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mListener != null) {
+                    mListener.onItemClicked(position % mImageUrls.size());
                 }
-            });
-        }
+            }
+        });
         ((ViewPager) container).addView(adsPicture);
         return adsPicture;
     }

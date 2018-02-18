@@ -36,17 +36,17 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public boolean phoneNumberRegistered(String phoneNumber) {
         BmobQuery<User> userBmobQuery = new BmobQuery<>();
-        userBmobQuery.addWhereEqualTo(C.MOBILE_PHONE_NUMBER, phoneNumber);
-        userBmobQuery.setLimit(1);
-        userBmobQuery.setSkip(0);
-        userBmobQuery.findObjects(new FindListener<User>() {
-            @Override
-            public void done(List<User> list, BmobException e) {
-                if (e != null || list.isEmpty()) {
-                    phoneNumberExist = false;
-                }
-            }
-        });
+        userBmobQuery.addWhereEqualTo(C.MOBILE_PHONE_NUMBER, phoneNumber)
+                .setLimit(1)
+                .setSkip(0)
+                .findObjects(new FindListener<User>() {
+                    @Override
+                    public void done(List<User> list, BmobException e) {
+                        if (e != null || list.isEmpty()) {
+                            phoneNumberExist = false;
+                        }
+                    }
+                });
         return phoneNumberExist;
     }
 

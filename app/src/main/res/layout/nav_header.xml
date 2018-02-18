@@ -25,11 +25,11 @@
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/or"
+        android:layout_toStartOf="@id/or"
         android:text="@string/register"
         android:layout_below="@id/nav_header_image"
         android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginRight="@dimen/dp_3"
+        android:layout_marginEnd="@dimen/dp_3"
         android:textColor="@color/register_get_vertify"
         android:textSize="@dimen/sp_18" />
 
@@ -37,11 +37,11 @@
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/or"
+        android:layout_toEndOf="@id/or"
         android:text="@string/login"
         android:layout_below="@id/nav_header_image"
         android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginLeft="@dimen/dp_3"
+        android:layout_marginStart="@dimen/dp_3"
         android:textColor="@color/register_get_vertify"
         android:textSize="@dimen/sp_18" />
 </RelativeLayout>

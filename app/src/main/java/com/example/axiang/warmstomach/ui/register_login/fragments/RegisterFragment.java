@@ -261,9 +261,11 @@ public class RegisterFragment extends Fragment implements RegisterContract.View 
                 mSnackbar = new CustomSnackbar.Builder()
                         .setParentView(registerRelativeLayout)
                         .setMessageText(networkErrorText)
-                        .setMessageColorId(R.color.net_work_error)
+                        .setMessageColorId(ContextCompat
+                                .getColor(getContext(), R.color.net_work_error))
                         .setActionText(goCheckItOutText)
-                        .setActionColorId(R.color.register_get_vertify)
+                        .setActionColorId(ContextCompat
+                                .getColor(getContext(), R.color.register_get_vertify))
                         .setListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -272,8 +274,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View 
                             }
                         })
                         .build();
-            } else {
-                mSnackbar.dismiss();
             }
             mSnackbar.show();
         }

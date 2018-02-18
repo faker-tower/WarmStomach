@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.register_login.RegisterOrLoginActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorBaseBackground">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/rol_toolbar"
@@ -15,7 +17,8 @@
         android:elevation="@dimen/dp_4"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:fitsSystemWindows="true" />
 
     <FrameLayout
         android:id="@+id/rol_frame_layout"

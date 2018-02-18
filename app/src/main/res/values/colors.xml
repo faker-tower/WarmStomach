@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FF69B4</color>
 
     <color name="colorBaseBackground">#FAFAFA</color>
     <color name="colorPrimaryText">#212121</color>
@@ -16,4 +16,6 @@
     <color name="net_work_error">#7A241E</color>
     <color name="position_loading_layout_bg">#5C5D4F</color>
     <color name="fragment_home_bg">#FFFFFF</color>
+    <color name="colorFoodPrice">#DC143C</color>
+    <color name="food_sort_bg">#D8D8D8</color>
 </resources>

@@ -14,35 +14,48 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.example.axiang.warmstomach.C;
 import com.example.axiang.warmstomach.R;
+import com.example.axiang.warmstomach.WarmStomachApplication;
 import com.example.axiang.warmstomach.adapters.HomeAdapter;
 import com.example.axiang.warmstomach.contracts.HomeContract;
+import com.example.axiang.warmstomach.data.Cart;
 import com.example.axiang.warmstomach.data.Store;
 import com.example.axiang.warmstomach.data.StoreAd;
+import com.example.axiang.warmstomach.data.StoreFood;
 import com.example.axiang.warmstomach.data.StoreType;
 import com.example.axiang.warmstomach.enums.PositionState;
+import com.example.axiang.warmstomach.interfaces.OnAdColumnItemListener;
 import com.example.axiang.warmstomach.interfaces.OnPositionStatedListener;
+import com.example.axiang.warmstomach.interfaces.OnStoreItemListener;
 import com.example.axiang.warmstomach.ui.home.MainActivity;
+import com.example.axiang.warmstomach.ui.store.StoreActivity;
 import com.example.axiang.warmstomach.util.ToastUtil;
 import com.example.axiang.warmstomach.widget.CustomSnackbar;
 import com.example.axiang.warmstomach.widget.CyclicalTextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -70,15 +83,17 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     FrameLayout homeFrameLayout;
     @BindView(R.id.home_coordinator_layout)
     CoordinatorLayout homeCoordinatorLayout;
+    @BindView(R.id.home_food_count)
+    TextView homeFoodCount;
 
     // 绑定dimen
     @BindDimen(R.dimen.dp_12)
     int shoppingCartMaginRightSize;
 
     // 绑定integer
-    @BindInt(R.integer.integer_200)
+    @BindInt(R.integer.integer_500)
     int totalAnimDuration;
-    @BindInt(R.integer.integer_100)
+    @BindInt(R.integer.integer_250)
     int alphaAnimDuration;
 
     // 绑定String
@@ -166,6 +181,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     private long mShoppingCartCurrentTime;
     private Timer mShoppingCartTimer;
     private TimerTask mShoppingCartTask;
+    private Map<StoreFood, Integer> mCartFoods = new HashMap<>();
 
     // 广告栏模块
     private List<StoreAd> mStoreAds;
@@ -280,6 +296,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 if (homeShoppingCart != null) {
                     homeShoppingCart.setX(windowWidth - homeShoppingCart.getWidth()
                             - shoppingCartMaginRightSize);
+                    showCartFoodNumber();
                 }
             }
 
@@ -311,6 +328,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
             @Override
             public void onAnimationStart(Animator animator) {
                 isShoppingCartEntering = false;
+                homeFoodCount.setVisibility(View.GONE);
             }
 
             @Override
@@ -340,6 +358,26 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 Intent intent = new Intent();
             }
         });
+    }
+
+    private void showCartFoodNumber() {
+        List<Cart> carts = WarmStomachApplication.getCarts();
+        int nowCount = 0;
+        if (!carts.isEmpty()) {
+            for (int i = 0; i < carts.size(); i++) {
+                nowCount += carts.get(i).getNumber();
+            }
+        }
+        if (nowCount == 0) {
+            homeFoodCount.setVisibility(View.GONE);
+        } else {
+            homeFoodCount.setVisibility(View.VISIBLE);
+            if (nowCount > 99) {
+                homeFoodCount.setText("99+");
+            } else {
+                homeFoodCount.setText(String.valueOf(nowCount));
+            }
+        }
     }
 
     private void initRecyclerView() {
@@ -398,6 +436,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void showNetWorkError() {
         isLoadOrRefresh = false;
+        isLoadMoreStoreData = false;
         if (isFragmentShowing) {
             if (homeRefreshLayout.isRefreshing()) {
                 homeRefreshLayout.setRefreshing(false);
@@ -409,9 +448,11 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 mSnackbar = new CustomSnackbar.Builder()
                         .setParentView(homeCoordinatorLayout)
                         .setMessageText(networkErrorText)
-                        .setMessageColorId(R.color.net_work_error)
+                        .setMessageColorId(ContextCompat
+                                .getColor(getContext(), R.color.net_work_error))
                         .setActionText(goCheckItOutText)
-                        .setActionColorId(R.color.register_get_vertify)
+                        .setActionColorId(ContextCompat
+                                .getColor(getContext(), R.color.register_get_vertify))
                         .setListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -420,8 +461,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                             }
                         })
                         .build();
-            } else {
-                mSnackbar.dismiss();
             }
             mSnackbar.show();
         }
@@ -430,6 +469,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void showUnknownError() {
         isLoadOrRefresh = false;
+        isLoadMoreStoreData = false;
         if (isFragmentShowing) {
             if (homeRefreshLayout.isRefreshing()) {
                 homeRefreshLayout.setRefreshing(false);
@@ -537,6 +577,24 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                             mStoreTypes,
                             mSuperStore,
                             mStores);
+                    mHomeAdapter.setOnStoreItemListener(new OnStoreItemListener() {
+                        @Override
+                        public void onItemClicked(int position) {
+                            Store store = mStores.get(position);
+                            Intent storeIntent = new Intent(mainActivity, StoreActivity.class);
+                            storeIntent.putExtra(C.NEED_LOAD_STORE, store);
+                            startActivity(storeIntent);
+                        }
+                    });
+                    mHomeAdapter.setOnAdColumnItemListener(new OnAdColumnItemListener() {
+                        @Override
+                        public void onItemClicked(int position) {
+                            String storeId = mStoreAds.get(position).getStoreId();
+                            Intent storeIntent = new Intent(mainActivity, StoreActivity.class);
+                            storeIntent.putExtra(C.NEED_LOAD_STORE_ID, storeId);
+                            startActivity(storeIntent);
+                        }
+                    });
                     homeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     homeRecyclerView.setAdapter(mHomeAdapter);
                 } else {
@@ -598,6 +656,18 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 if (homeRefreshLayout.isRefreshing()) {
                     homeRefreshLayout.setRefreshing(false);
                 }
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isInitDataSuccess) {
+            if (isShoppingCartEntering) {
+                showCartFoodNumber();
+            } else {
+                mHomeHandler.sendEmptyMessage(C.SHOOPING_CART_NORMAL);
             }
         }
     }

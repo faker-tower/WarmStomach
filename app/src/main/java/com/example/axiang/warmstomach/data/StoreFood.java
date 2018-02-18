@@ -12,11 +12,10 @@ public class StoreFood extends BmobObject {
     private String foodName;
     private String foodOwnSortId;
     private String foodOwnStoreId;
-    private Integer foodPrice;
+    private Double foodPrice;
     private Integer foodMonthSoldOn;
     private Integer foodLikeNumber;
-    private String foodSummary;
-    private BmobFile foodImage;
+    private String foodPicture;
 
     public String getFoodName() {
         return foodName;
@@ -42,11 +41,11 @@ public class StoreFood extends BmobObject {
         this.foodOwnStoreId = foodOwnStoreId;
     }
 
-    public Integer getFoodPrice() {
+    public Double getFoodPrice() {
         return foodPrice;
     }
 
-    public void setFoodPrice(Integer foodPrice) {
+    public void setFoodPrice(Double foodPrice) {
         this.foodPrice = foodPrice;
     }
 
@@ -66,19 +65,23 @@ public class StoreFood extends BmobObject {
         this.foodLikeNumber = foodLikeNumber;
     }
 
-    public String getFoodSummary() {
-        return foodSummary;
+    public String getFoodPicture() {
+        return foodPicture;
     }
 
-    public void setFoodSummary(String foodSummary) {
-        this.foodSummary = foodSummary;
+    public void setFoodPicture(String foodPicture) {
+        this.foodPicture = foodPicture;
     }
 
-    public BmobFile getFoodImage() {
-        return foodImage;
-    }
-
-    public void setFoodImage(BmobFile foodImage) {
-        this.foodImage = foodImage;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof StoreFood) {
+            StoreFood food = (StoreFood) obj;
+            if (this.getObjectId().equals(food.getObjectId())
+                    && this.getFoodName().equals(food.getFoodName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

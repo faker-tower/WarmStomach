@@ -139,6 +139,8 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                 .getSharedPreferences().getString(C.LAST_LOGIN_PHONE_NUMBER, "");
         if (phoneNumber != null && !TextUtils.isEmpty(phoneNumber)) {
             loginInputPhoneEt.setText(phoneNumber);
+            // 设置光标到最后
+            loginInputPhoneEt.setSelection(loginInputPhoneEt.getText().length());
         }
     }
 
@@ -295,9 +297,11 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                 mSnackbar = new CustomSnackbar.Builder()
                         .setParentView(loginRelativeLayout)
                         .setMessageText(networkErrorText)
-                        .setMessageColorId(R.color.net_work_error)
+                        .setMessageColorId(ContextCompat
+                                .getColor(getContext(), R.color.net_work_error))
                         .setActionText(goCheckItOutText)
-                        .setActionColorId(R.color.register_get_vertify)
+                        .setActionColorId(ContextCompat
+                                .getColor(getContext(), R.color.register_get_vertify))
                         .setListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -306,8 +310,6 @@ public class LoginFragment extends Fragment implements LoginContract.View {
                             }
                         })
                         .build();
-            } else {
-                mSnackbar.dismiss();
             }
             mSnackbar.show();
         }

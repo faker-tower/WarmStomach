@@ -6,8 +6,15 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.example.axiang.warmstomach.data.Cart;
+import com.example.axiang.warmstomach.data.StoreFood;
 import com.example.axiang.warmstomach.util.SharedPreferencesUtil;
 import com.zxy.tiny.Tiny;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.bmob.sms.BmobSMS;
 import cn.bmob.v3.Bmob;
@@ -21,17 +28,23 @@ public class WarmStomachApplication extends MultiDexApplication {
 
     private static Context mContext;
 
+    private static List<Cart> mCarts;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
 
+    public static List<Cart> getCarts() {
+        return mCarts;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
-
+        mCarts = new ArrayList<>();
         // 设置是否夜间主题
         if (SharedPreferencesUtil.getSharedPreferences().getBoolean(C.IF_NIGHT_MODE, false)) {
             // 设置为夜间模式

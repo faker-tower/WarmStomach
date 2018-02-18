@@ -70,8 +70,8 @@ public class RegisterOrLoginActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setHomeButtonEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.rol_back);
         }
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.rol_back);
         if (isShowRegister) {
             showRegisterLayout();
         } else {

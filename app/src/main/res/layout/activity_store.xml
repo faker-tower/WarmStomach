@@ -1,10 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_activity_store"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.store.StoreActivity">
+    android:background="@color/colorBaseBackground"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.store.StoreActivity"
+    tools:ignore="ContentDescription">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/store_coll_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_280"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
+            app:expandedTitleMarginEnd="@dimen/dp_20"
+            app:expandedTitleMarginStart="@dimen/dp_20"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:statusBarScrim="@color/colorPrimary"
+            app:contentScrim="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/iv_store_toolbar_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.5"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_loading"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginStart="@dimen/dp_20"
+                android:orientation="vertical"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7">
+
+                <TextView
+                    android:id="@+id/tv_store_announcement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_2"
+                    android:maxLines="@integer/integer_4"
+                    android:textColor="@color/colorBaseBackground"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/tv_store_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:maxLines="@integer/integer_3"
+                    android:textColor="@color/colorBaseBackground"
+                    android:textSize="@dimen/sp_12" />
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/store_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:title="@string/app_name" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/dp_56"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_store_food_sort"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="match_parent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_store_food"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/store_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_56"
+        android:layout_gravity="bottom"
+        android:background="@color/position_loading_layout_bg">
+
+        <Button
+            android:id="@+id/to_settle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp_18"
+            android:textColor="@color/colorSecondaryText"
+            android:background="@color/position_loading_layout_bg"
+            android:clickable="false"
+            android:padding="@dimen/dp_12"
+            android:gravity="center"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/store_all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_20"
+            android:textColor="@color/colorFoodPrice"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_100"
+            android:clickable="false"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/store_shopping_cart"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="@dimen/dp_56"
+        app:layout_anchor="@id/store_bottom_layout"
+        android:layout_marginStart="@dimen/dp_25"
+        android:src="@drawable/shopping_cart"
+        app:backgroundTint="@color/position_loading_layout_bg"
+        app:rippleColor="@color/register_get_vertify"
+        app:borderWidth="0dp"
+        app:pressedTranslationZ="0dp"
+        app:elevation="0dp"
+        android:scaleType="center"
+        android:clickable="false" />
+
+    <TextView
+        android:id="@+id/store_food_count"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="@dimen/dp_32"
+        app:layout_anchor="@id/store_shopping_cart"
+        android:textSize="@dimen/sp_15"
+        android:background="@drawable/food_count_bg"
+        app:layout_anchorGravity="end"
+        android:textColor="@color/colorPrimaryText"
+        android:gravity="center"
+        android:visibility="gone" />
+</android.support.design.widget.CoordinatorLayout>
+

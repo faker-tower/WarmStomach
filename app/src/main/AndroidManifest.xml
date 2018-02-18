@@ -23,8 +23,6 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <!-- 允许应用程序读取电话状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 相机权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -74,7 +72,7 @@
             android:screenOrientation="portrait" />
 
         <activity android:name=".ui.store.StoreActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.STORE"
             android:screenOrientation="portrait" />
     </application>
 

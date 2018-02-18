@@ -39,4 +39,15 @@
         <!--退场动画-->
         <item name="android:windowExitAnimation">@anim/popup_diss</item>
     </style>
+
+    <style name="cart_anim_style">
+        <!--进场动画-->
+        <item name="android:windowEnterAnimation">@anim/cart_show</item>
+        <!--退场动画-->
+        <item name="android:windowExitAnimation">@anim/cart_diss</item>
+    </style>
+    
+    <style name="AppTheme.STORE" parent="AppTheme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 </resources>

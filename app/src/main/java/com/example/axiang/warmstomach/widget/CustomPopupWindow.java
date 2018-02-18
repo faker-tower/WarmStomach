@@ -8,17 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.PopupWindow;
+
+import com.example.axiang.warmstomach.interfaces.OnPWClosedListener;
 
 public class CustomPopupWindow implements PopupWindow.OnDismissListener {
 
     private PopupWindow mPopupWindow;
-
     private Context mContext;
-
     private View mContentView;
-
     private Activity mActivity;
+    private OnPWClosedListener mOnPWClosedListener;
 
     public CustomPopupWindow(Builder builder) {
         this.mContext = builder.context;
@@ -41,8 +42,13 @@ public class CustomPopupWindow implements PopupWindow.OnDismissListener {
         }
         mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mPopupWindow.setOutsideTouchable(builder.touchable);
-        mPopupWindow.setAnimationStyle(builder.animationStyle);
+        if (builder.animationStyle != -1) {
+            mPopupWindow.setAnimationStyle(builder.animationStyle);
+        }
         mPopupWindow.setOnDismissListener(this);
+        if (builder.onPWClosedListener != null) {
+            this.mOnPWClosedListener = builder.onPWClosedListener;
+        }
     }
 
     public CustomPopupWindow showAtLocation(int rootViewId, int gravity, int x, int y) {
@@ -76,6 +82,9 @@ public class CustomPopupWindow implements PopupWindow.OnDismissListener {
                 params.alpha = 1.0f;
                 mActivity.getWindow().setAttributes(params);
             }
+            if (mOnPWClosedListener != null) {
+                mOnPWClosedListener.onPwClosed();
+            }
         }
     }
 
@@ -89,6 +98,7 @@ public class CustomPopupWindow implements PopupWindow.OnDismissListener {
         private int animationStyle;
         private Activity activity;
         private float backgroupAlpha;
+        private OnPWClosedListener onPWClosedListener;
 
         public Builder setContext(Context context) {
             this.context = context;
@@ -128,6 +138,11 @@ public class CustomPopupWindow implements PopupWindow.OnDismissListener {
         public Builder setActivityAndAlpha(Activity activity, float backgroupAlpha) {
             this.activity = activity;
             this.backgroupAlpha = backgroupAlpha;
+            return this;
+        }
+
+        public Builder setOnPWColsedListener(OnPWClosedListener onPWClosedListener) {
+            this.onPWClosedListener = onPWClosedListener;
             return this;
         }
 

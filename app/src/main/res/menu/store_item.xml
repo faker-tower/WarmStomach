@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/collect"
+        android:icon="@drawable/no_collect"
+        android:title="@string/collect"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/call"
+        android:icon="@drawable/call"
+        android:title="@string/call"
+        app:showAsAction="ifRoom" />
+</menu>

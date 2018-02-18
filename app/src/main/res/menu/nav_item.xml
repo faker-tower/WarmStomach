@@ -5,8 +5,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/personal_info"
-            android:icon="@drawable/presonal_info"
-            android:iconTint="@color/colorPrimary"
+            android:icon="@drawable/personal_info"
             android:title="@string/personal_info" />
         <item
             android:id="@+id/my_collection"

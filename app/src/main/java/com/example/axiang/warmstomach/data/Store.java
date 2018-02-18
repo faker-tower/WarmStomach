@@ -135,4 +135,15 @@ public class Store extends BmobObject {
     public void setStoreAddress(String storeAddress) {
         this.storeAddress = storeAddress;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Store) {
+            Store store = (Store) obj;
+            if (this.getObjectId().equals(((Store) obj).getObjectId())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -92,4 +92,16 @@
     <string name="search_business">Search business</string>
     <string name="no_data">No data</string>
     <string name="search_business_failed">Search business failed</string>
+
+    <!--StoreActivity-->
+    <string name="announcement">Announcement:</string>
+    <string name="address">Address:</string>
+    <string name="collect">Collect</string>
+    <string name="call">Call</string>
+    <string name="get_business_phone_error">Unable to get to business phone</string>
+    <string name="like">Like</string>
+    <string name="to_settle">To settle</string>
+    <string name="lack">Lack</string>
+    <string name="to_send">to send</string>
+    <string name="clear_shopping_cart">Empty the shopping cart</string>
 </resources>

@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +42,7 @@ import com.example.axiang.warmstomach.C;
 import com.example.axiang.warmstomach.R;
 import com.example.axiang.warmstomach.adapters.MainViewPagerAdapter;
 import com.example.axiang.warmstomach.contracts.MainContract;
+import com.example.axiang.warmstomach.data.StoreFood;
 import com.example.axiang.warmstomach.data.User;
 import com.example.axiang.warmstomach.enums.PositionState;
 import com.example.axiang.warmstomach.presenters.HomePresenter;
@@ -60,7 +63,9 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindString;
@@ -429,6 +434,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mNavHeaderViewHolder.navHeaderImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawer(Gravity.START);
                 if (ContextCompat.checkSelfPermission(MainActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -460,6 +466,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 R.string.drawer_layout_close);
         toggle.syncState();
         drawerLayout.addDrawerListener(toggle);
+        toolbarPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPositionState == PositionState.positionFailed) {
+                    mPresenter.start();
+                }
+            }
+        });
     }
 
     private void initHomeFragment(Bundle savedInstanceState) {
@@ -579,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .setHeight(metrics.heightPixels / 4)
                 // 设置获取聚焦，点击Back物理键可关闭
                 .setFocusable(true)
-                // 设置PopupWindo外的触摸事件不传递到下面的窗口
+                // 设置PopupWindow外的触摸事件不传递到下面的窗口
                 .setTouchable(false)
                 // 设置被遮挡的视图的透明度
                 .setActivityAndAlpha(this, 0.5f)
@@ -674,7 +688,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 }
                 break;
             case C.REQUEST_IMAGE_FROM_CAREMA:
-                if (data == null) {
+                if (data == null || resultCode == RESULT_CANCELED) {
                     return;
                 }
                 if (resultCode != RESULT_OK) {
@@ -700,7 +714,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 }
                 break;
             case C.REQUEST_IMAGE_FROM_PICK:
-                if (data == null) {
+                if (data == null || resultCode == RESULT_CANCELED) {
                     return;
                 }
                 if (resultCode != RESULT_OK) {

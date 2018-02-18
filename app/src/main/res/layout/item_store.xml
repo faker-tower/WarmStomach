@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_store"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_100"
     android:padding="@dimen/dp_10"
-    android:background="@drawable/popup_item_click_bg">
+    android:background="@drawable/popup_item_click_bg"
+    tools:ignore="ContentDescription">
 
     <ImageView
         android:id="@+id/item_store_avatar"
         android:layout_width="@dimen/dp_80"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -17,7 +20,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_toRightOf="@id/item_store_avatar"
+        android:layout_toEndOf="@id/item_store_avatar"
         android:orientation="vertical">
 
         <TextView
@@ -46,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorSecondaryText"
                 android:text="@string/month_sold_on"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_5"
                 android:textSize="@dimen/sp_12" />
 
             <TextView
@@ -54,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorSecondaryText"
-                android:layout_marginLeft="@dimen/dp_2"
+                android:layout_marginStart="@dimen/dp_2"
                 android:textSize="@dimen/sp_12" />
         </LinearLayout>
 
@@ -76,14 +79,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/money_symbol"
                 android:textColor="@color/colorSecondaryText"
-                android:layout_marginLeft="@dimen/dp_2"
+                android:layout_marginStart="@dimen/dp_2"
                 android:textSize="@dimen/sp_12" />
 
             <TextView
                 android:id="@+id/item_store_starting_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="wewewe"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/sp_12" />
 
@@ -91,14 +93,15 @@
                 android:layout_width="@dimen/dp_1"
                 android:layout_height="@dimen/dp_12"
                 android:background="@color/colorSecondaryText"
-                android:layout_marginLeft="@dimen/dp_2" />
+                android:layout_marginTop="@dimen/dp_2"
+                android:layout_marginStart="@dimen/dp_2" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delivery"
                 android:textColor="@color/colorSecondaryText"
-                android:layout_marginLeft="@dimen/dp_2"
+                android:layout_marginStart="@dimen/dp_2"
                 android:textSize="@dimen/sp_12" />
 
             <TextView
@@ -106,29 +109,29 @@
                 android:layout_height="wrap_content"
                 android:text="@string/money_symbol"
                 android:textColor="@color/colorSecondaryText"
-                android:layout_marginLeft="@dimen/dp_2"
+                android:layout_marginStart="@dimen/dp_2"
                 android:textSize="@dimen/sp_12" />
 
             <TextView
                 android:id="@+id/item_store_delivery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="wewewe"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/sp_12" />
 
             <View
                 android:layout_width="@dimen/dp_1"
                 android:layout_height="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_2"
                 android:background="@color/colorSecondaryText"
-                android:layout_marginLeft="@dimen/dp_2" />
+                android:layout_marginStart="@dimen/dp_2" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/per_capita"
                 android:textColor="@color/colorSecondaryText"
-                android:layout_marginLeft="@dimen/dp_2"
+                android:layout_marginStart="@dimen/dp_2"
                 android:textSize="@dimen/sp_12" />
 
             <TextView
@@ -136,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/money_symbol"
                 android:textColor="@color/colorSecondaryText"
-                android:layout_marginLeft="@dimen/dp_2"
+                android:layout_marginStart="@dimen/dp_2"
                 android:textSize="@dimen/sp_12" />
 
             <TextView
@@ -167,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cash_on_delivery"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_5"
                 android:textColor="@color/register_get_vertify"
                 android:background="@drawable/support_payment_method_bg"
                 android:textSize="@dimen/sp_10" />
@@ -176,7 +179,7 @@
                 android:id="@+id/item_store_pick_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_5"
                 android:text="@string/pick_up"
                 android:textColor="@color/register_get_vertify"
                 android:background="@drawable/support_payment_method_bg"
@@ -188,7 +191,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_5"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 

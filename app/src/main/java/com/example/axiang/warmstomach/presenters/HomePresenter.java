@@ -38,6 +38,8 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void start() {
         loadStoreAdData();
+        loadSuperStoreData();
+        loadInterfaceStoreData(0);
     }
 
     @Override
@@ -48,21 +50,20 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void loadStoreAdData() {
         BmobQuery<StoreAd> query = new BmobQuery<>();
-        query.setLimit(C.CAROUSEL_IMAGE_NUMBER);
-        query.setSkip(0);
-        query.findObjects(new FindListener<StoreAd>() {
-            @Override
-            public void done(List<StoreAd> list, BmobException e) {
-                if (e != null || list == null || list.isEmpty()) {
-                    Log.e("loadStoreAdData", e.toString());
-                    e.printStackTrace();
-                    handleLoadError();
-                } else {
-                    mView.updateStoreAd(list);
-                    loadSuperStoreData();
-                }
-            }
-        });
+        query.setLimit(C.CAROUSEL_IMAGE_NUMBER)
+                .setSkip(0)
+                .findObjects(new FindListener<StoreAd>() {
+                    @Override
+                    public void done(List<StoreAd> list, BmobException e) {
+                        if (e != null || list == null || list.isEmpty()) {
+                            Log.e("loadStoreAdData", e.toString());
+                            e.printStackTrace();
+                            handleLoadError();
+                        } else {
+                            mView.updateStoreAd(list);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -72,26 +73,26 @@ public class HomePresenter implements HomeContract.Presenter {
         double latitude = Double.valueOf(SharedPreferencesUtil.getSharedPreferences()
                 .getString(C.LATITUDE, ""));
         BmobQuery<SuperStore> query = new BmobQuery<>();
-        query.setSkip(0);
-        query.findObjects(new FindListener<SuperStore>() {
-            @Override
-            public void done(List<SuperStore> list, BmobException e) {
-                if (e != null || list == null || list.isEmpty()) {
-                    Log.e("loadStoreAdData", e.toString());
-                    e.printStackTrace();
-                    handleLoadError();
-                } else {
-                    quiteSortSuperStoreList(list, 0, list.size() - 1);
-                    loadStoreBySuperStoreId(list.get(0).getSuperStoreId());
-                }
-            }
-        });
+        query.setSkip(0)
+                .findObjects(new FindListener<SuperStore>() {
+                    @Override
+                    public void done(List<SuperStore> list, BmobException e) {
+                        if (e != null || list == null || list.isEmpty()) {
+                            Log.e("loadStoreAdData", e.toString());
+                            e.printStackTrace();
+                            handleLoadError();
+                        } else {
+                            quiteSortSuperStoreList(list, 0, list.size() - 1);
+                            loadStoreBySuperStoreId(list.get(0).getSuperStoreId());
+                        }
+                    }
+                });
     }
 
     // 快速算法排序SuperStoreList数组
     private void quiteSortSuperStoreList(List<SuperStore> superStores,
-                                                     int start,
-                                                     int end) {
+                                         int start,
+                                         int end) {
         if (start < end) {
             int temp = sortSuperStoreList(superStores, start, end);
             quiteSortSuperStoreList(superStores, start, temp - 1);
@@ -140,26 +141,36 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void loadInterfaceStoreData(final int offset) {
         BmobQuery<Store> query = new BmobQuery<>();
-        query.setSkip(offset);
-        query.findObjects(new FindListener<Store>() {
-            @Override
-            public void done(List<Store> list, BmobException e) {
-                if (e != null || list == null || list.isEmpty()) {
-                    Log.e("loadStoreAdData", e.toString());
-                    e.printStackTrace();
-                    handleLoadError();
-                } else {
-                    quiteSortStoreList(list, 0, list.size() - 1);
-                    mView.updateStore(list);
-                }
-            }
-        });
+        query.setSkip(offset)
+                .findObjects(new FindListener<Store>() {
+                    @Override
+                    public void done(List<Store> list, BmobException e) {
+                        if (e != null || list == null || list.isEmpty()) {
+                            Log.e("loadStoreAdData", e.toString());
+                            e.printStackTrace();
+                            handleLoadError();
+                        } else {
+                            quiteSortStoreList(list, 0, list.size() - 1);
+                            reverseSelf(list);
+                            mView.updateStore(list);
+                        }
+                    }
+                });
+    }
+
+    // 数组元素倒序
+    private void reverseSelf(List<Store> list) {
+        for (int i = 0, j = list.size() - 1; i < j; i++, j--) {
+            Store store = list.get(i);
+            list.set(i, list.get(j));
+            list.set(j, store);
+        }
     }
 
     // 快速算法排序StoreList数组
     private void quiteSortStoreList(List<Store> stores,
-                                         int start,
-                                         int end) {
+                                    int start,
+                                    int end) {
         if (start < end) {
             int temp = sortStoreList(stores, start, end);
             quiteSortStoreList(stores, start, temp - 1);
@@ -216,7 +227,6 @@ public class HomePresenter implements HomeContract.Presenter {
                     handleLoadError();
                 } else {
                     mView.updateSuperStore(store);
-                    loadInterfaceStoreData(0);
                 }
             }
         });

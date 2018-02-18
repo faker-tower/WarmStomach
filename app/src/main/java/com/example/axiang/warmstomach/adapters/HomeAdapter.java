@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ import com.example.axiang.warmstomach.data.StoreAd;
 import com.example.axiang.warmstomach.data.StoreType;
 import com.example.axiang.warmstomach.interfaces.AdColumnOnClickListener;
 import com.example.axiang.warmstomach.interfaces.HomeListener;
+import com.example.axiang.warmstomach.interfaces.OnAdColumnItemListener;
+import com.example.axiang.warmstomach.interfaces.OnStoreItemListener;
 import com.example.axiang.warmstomach.util.CalculateUtil;
 import com.example.axiang.warmstomach.util.SharedPreferencesUtil;
 
@@ -46,9 +49,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private Store mStore;
     private List<Store> mStores;
+    private OnStoreItemListener mStoreItemListener;
 
     // 广告栏模块
     private List<StoreAd> mStoreAds;
+    private OnAdColumnItemListener mAdColumnItemListener;
     private AdColumnViewHolder mAdColumnViewHolder;
     private CarouselAdapter mCarouselAdapter;
     private List<String> mCarouselImageUrlList;
@@ -104,6 +109,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public HomeListener getHomeListener() {
         return mHomeListener;
+    }
+
+    public void setOnStoreItemListener(OnStoreItemListener storeItemListener) {
+        this.mStoreItemListener = storeItemListener;
+    }
+
+    public void setOnAdColumnItemListener(OnAdColumnItemListener adColumnItemListener) {
+        this.mAdColumnItemListener = adColumnItemListener;
     }
 
     public void setStoreTypes(List<StoreType> storeTypes) {
@@ -257,7 +270,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void initStore(StoreViewHolder viewHolder, int position) {
+    private void initStore(final StoreViewHolder viewHolder, int position) {
         Store store = mStores.get(position);
         Glide.with(mContext)
                 .load(store.getStoreAvatar())
@@ -300,19 +313,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         viewHolder.itemStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                        if (listener != null) {
-//                            listener.onItemClicked(holder.getAdapterPosition());
-//                        }
-            }
-        });
-
-        viewHolder.itemStore.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-//                        if (listener != null) {
-//                            listener.OnItemLongClicked(holder.getAdapterPosition());
-//                        }
-                return true;
+                if (mStoreItemListener != null) {
+                    mStoreItemListener.onItemClicked(viewHolder.getAdapterPosition() - 3);
+                }
             }
         });
     }
@@ -357,12 +360,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void initAdColumn(AdColumnViewHolder viewHolder) {
         mCarouselAdapter = new CarouselAdapter(mContext, mCarouselImageUrlList);
-        mCarouselAdapter.setListener(new AdColumnOnClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                String storeId = mStoreAds.get(position).getStoreId();
-            }
-        });
+        mCarouselAdapter.setListener(mAdColumnItemListener);
         viewHolder.carousel.setAdapter(mCarouselAdapter);
         viewHolder.carousel.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

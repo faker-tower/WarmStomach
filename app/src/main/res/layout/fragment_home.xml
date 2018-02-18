@@ -21,7 +21,7 @@
                 android:id="@+id/home_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbarFadeDuration="@integer/integer_200"
+                android:scrollbarFadeDuration="@integer/integer_500"
                 android:scrollbarSize="@dimen/dp_3"
                 android:scrollbarStyle="insideOverlay"
                 android:scrollbars="vertical"
@@ -42,5 +42,17 @@
             app:pressedTranslationZ="@dimen/dp_10"
             app:backgroundTint="@color/colorAccent"
             app:rippleColor="@color/register_get_vertify" />
+
+        <TextView
+            android:id="@+id/home_food_count"
+            android:layout_width="@dimen/dp_25"
+            android:layout_height="@dimen/dp_25"
+            app:layout_anchor="@id/home_shopping_cart"
+            android:textSize="@dimen/sp_12"
+            android:background="@drawable/food_count_bg"
+            app:layout_anchorGravity="end"
+            android:textColor="@color/colorPrimaryText"
+            android:gravity="center"
+            android:visibility="gone" />
     </android.support.design.widget.CoordinatorLayout>
 </FrameLayout>

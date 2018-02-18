@@ -112,4 +112,17 @@ public class C {
     public static final int RECYCLER_VIEW_VERTICAL_LIST = LinearLayoutManager.VERTICAL;
     // RecyclerView页尾
     public static final int RECYCLER_VIEW_FOOTER = 442;
+
+    // 要加载的商家对象
+    public static final String NEED_LOAD_STORE = "need_load_store";
+    // 要加载的商家Id
+    public static final String NEED_LOAD_STORE_ID = "need_load_store_id";
+    // 商家食物分类对应的商家id字段
+    public static final String SORT_TO_STORE = "ownStoreId";
+    // 商家食物对应的商家id字段
+    public static final String FOOD_TO_STORE = "foodOwnStoreId";
+    // StoreSortAdapter中的标题栏类型
+    public static final int STORE_FOOD_TYPE_TITLE = 12;
+    // StoreSortAdapter中的食物类型
+    public static final int STORE_FOOD_TYPE_CONTENT = 13;
 }

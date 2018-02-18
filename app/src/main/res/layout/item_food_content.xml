@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_food_content"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_100"
+    android:background="@drawable/popup_item_click_bg"
+    android:padding="@dimen/dp_10"
+    tools:ignore="ContentDescription">
+
+    <ImageView
+        android:id="@+id/food_picture"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_toEndOf="@id/food_picture"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/food_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="@integer/integer_1"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/food_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="@integer/integer_1"
+            android:textColor="@color/colorSecondaryText"
+            android:layout_marginTop="@dimen/dp_5"
+            android:textSize="@dimen/sp_12" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/month_sold_on"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/food_month_sold_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_2"
+                android:maxLength="@integer/integer_8"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:text="@string/like"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/food_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_2"
+                android:maxLength="@integer/integer_8"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/money_symbol"
+                android:textColor="@color/colorFoodPrice"
+                android:textSize="@dimen/sp_15"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/food_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_2"
+                android:maxLength="@integer/integer_8"
+                android:textColor="@color/colorFoodPrice"
+                android:textSize="@dimen/sp_15"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/food_add"
+        android:layout_width="@dimen/dp_28"
+        android:layout_height="@dimen/dp_28"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/food_add" />
+
+    <TextView
+        android:id="@+id/food_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:layout_toStartOf="@id/food_add"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/sp_15"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/food_cut"
+        android:layout_width="@dimen/dp_28"
+        android:layout_height="@dimen/dp_28"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:layout_toStartOf="@id/food_number"
+        android:src="@drawable/food_cut"
+        android:visibility="gone" />
+</RelativeLayout>
