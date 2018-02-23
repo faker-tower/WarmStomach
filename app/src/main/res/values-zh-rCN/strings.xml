@@ -105,4 +105,16 @@
     <string name="lack">差</string>
     <string name="to_send">起送</string>
     <string name="clear_shopping_cart">清空购物车</string>
+
+    <!--SettlementActivity-->
+    <string name="shopping_cart">购物车</string>
+    <string name="edit">编辑</string>
+    <string name="null_cart_hint">购物车空空如也，快去逛逛吧~~</string>
+    <string name="go_shopping">去逛逛</string>
+    <string name="sharp">\></string>
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="prompt">提示</string>
+    <string name="want_to_delete">确认要删除吗？</string>
+    <string name="determine">确定</string>
 </resources>

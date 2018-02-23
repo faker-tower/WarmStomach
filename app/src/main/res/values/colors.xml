@@ -18,4 +18,5 @@
     <color name="fragment_home_bg">#FFFFFF</color>
     <color name="colorFoodPrice">#DC143C</color>
     <color name="food_sort_bg">#D8D8D8</color>
+    <color name="cart_layout_bg">#F8F8F8</color>
 </resources>

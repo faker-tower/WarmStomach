@@ -610,12 +610,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             mPopupWindow.setChildOnCilickListener(R.id.first_layout, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mPopupWindow.onDismiss();
                     User user = BmobUser.getCurrentUser(User.class);
                     if (user != null) {
                         BmobUser.logOut();
                     }
                     resetLogin();
-                    mPopupWindow.onDismiss();
                 }
             });
             mPopupWindow.setChildOnCilickListener(R.id.second_layout, new View.OnClickListener() {
@@ -628,6 +628,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             mPopupWindow.setChildOnCilickListener(R.id.first_layout, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mPopupWindow.onDismiss();
                     if (ContextCompat.checkSelfPermission(MainActivity.this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(MainActivity.this,
@@ -641,6 +642,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             mPopupWindow.setChildOnCilickListener(R.id.second_layout, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mPopupWindow.onDismiss();
                     // 从相册中选取图片
                     Intent albumIntent = new Intent(Intent.ACTION_PICK);
                     albumIntent.setType("image/*");
@@ -688,9 +690,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 }
                 break;
             case C.REQUEST_IMAGE_FROM_CAREMA:
-                if (data == null || resultCode == RESULT_CANCELED) {
-                    return;
-                }
                 if (resultCode != RESULT_OK) {
                     ToastUtil.showToast(failedGetPictureText);
                 } else {
@@ -714,9 +713,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 }
                 break;
             case C.REQUEST_IMAGE_FROM_PICK:
-                if (data == null || resultCode == RESULT_CANCELED) {
-                    return;
-                }
                 if (resultCode != RESULT_OK) {
                     ToastUtil.showToast(failedGetPictureText);
                 } else {

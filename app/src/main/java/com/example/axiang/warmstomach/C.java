@@ -125,4 +125,11 @@ public class C {
     public static final int STORE_FOOD_TYPE_TITLE = 12;
     // StoreSortAdapter中的食物类型
     public static final int STORE_FOOD_TYPE_CONTENT = 13;
+
+    // SettlementAdapter中的Store类型
+    public static final int SETTLE_TYPE_STORE = 14;
+    // SettlementAdapter中的Cart类型
+    public static final int SETTLE_TYPE_CART = 15;
+    // SettlementAdapter中的Settle类型
+    public static final int SETTLE_TYPE_SETTLE = 16;
 }

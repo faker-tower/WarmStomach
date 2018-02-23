@@ -36,7 +36,8 @@
         android:theme="@style/AppTheme.START">
         <activity
             android:name=".ui.home.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,12 +69,19 @@
 
         <activity
             android:name=".ui.register_login.RegisterOrLoginActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
-        <activity android:name=".ui.store.StoreActivity"
+        <activity
+            android:name=".ui.store.StoreActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.STORE"
-            android:screenOrientation="portrait" />
-    </application>
+            android:launchMode="singleTask" />
 
+        <activity
+            android:name=".ui.settlement.SettlementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTask" />
+    </application>
 </manifest>

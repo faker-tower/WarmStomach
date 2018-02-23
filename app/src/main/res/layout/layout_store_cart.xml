@@ -37,7 +37,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:background="@color/colorSecondaryText"/>
+        android:background="@color/bt_click_bg"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_cart"
@@ -50,7 +50,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:background="@color/colorSecondaryText" />
+        android:background="@color/bt_click_bg" />
 
     <RelativeLayout
         android:layout_width="match_parent"

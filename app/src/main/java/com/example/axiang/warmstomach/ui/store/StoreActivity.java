@@ -51,6 +51,7 @@ import com.example.axiang.warmstomach.interfaces.OnPWClosedListener;
 import com.example.axiang.warmstomach.interfaces.OnSortListener;
 import com.example.axiang.warmstomach.interfaces.onStoreCartListener;
 import com.example.axiang.warmstomach.presenters.StorePresenter;
+import com.example.axiang.warmstomach.ui.settlement.SettlementActivity;
 import com.example.axiang.warmstomach.util.ToastUtil;
 import com.example.axiang.warmstomach.widget.CustomPopupWindow;
 import com.example.axiang.warmstomach.widget.CustomSnackbar;
@@ -63,7 +64,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindColor;
-import butterknife.BindDimen;
 import butterknife.BindInt;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -97,6 +97,10 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
     LinearLayout layoutContent;
     @BindView(R.id.store_bottom_layout)
     RelativeLayout storeBottomLayout;
+    @BindView(R.id.to_settle)
+    Button toSettle;
+    @BindView(R.id.store_shopping_cart)
+    FloatingActionButton storeShoppingCart;
 
     // 绑定integer
     @BindInt(R.integer.integer_500)
@@ -137,10 +141,6 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
     String moneySymbolText;
     @BindString(R.string.to_settle)
     String toSettleText;
-    @BindView(R.id.to_settle)
-    Button toSettle;
-    @BindView(R.id.store_shopping_cart)
-    FloatingActionButton storeShoppingCart;
 
     // 要加载的商家
     private Store mStore;
@@ -308,7 +308,7 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
             mFoodAdapter.setListener(new OnFoodListener() {
                 @Override
                 public void onItemClicked(int position) {
-                    Log.e("Food: onItemClicked", position + "");
+
                 }
 
                 @Override
@@ -441,6 +441,9 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
                 updatePriceLayout();
                 updateShoppingCartLayout();
             }
+        } else {
+            toSettle.setClickable(false);
+            storeShoppingCart.setClickable(false);
         }
         return map;
     }
@@ -501,6 +504,7 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
         mPopupWindow.setChildOnCilickListener(R.id.cart_to_settle, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPopupWindow.onDismiss();
                 toSettleLayout();
             }
         });
@@ -508,7 +512,7 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
     }
 
     private void toSettleLayout() {
-
+        startActivity(new Intent(this, SettlementActivity.class));
     }
 
     private void initRvCart(RecyclerView rvCart) {
@@ -862,20 +866,16 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
         mLoadingViewHolder = null;
     }
 
-    @OnClick(R.id.store_shopping_cart)
-    public void onViewClicked() {
+    // 等待加载数据模块
+    static class LoadingViewHolder {
+
+        @BindView(R.id.tv_loading)
+        CyclicalTextView tvLoading;
+        @BindView(R.id.bt_retry)
+        Button btRetry;
+
+        LoadingViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
-
-// 等待加载数据模块
-static class LoadingViewHolder {
-
-    @BindView(R.id.tv_loading)
-    CyclicalTextView tvLoading;
-    @BindView(R.id.bt_retry)
-    Button btRetry;
-
-    LoadingViewHolder(View view) {
-        ButterKnife.bind(this, view);
-    }
-}
 }

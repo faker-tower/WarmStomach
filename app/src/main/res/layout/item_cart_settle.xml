@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/dp_10"
+    android:background="@color/cart_layout_bg"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/cart_layout_bg" />
+
+    <RelativeLayout
+        android:id="@+id/cart_settle_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:background="@color/fragment_home_bg">
+
+        <TextView
+            android:id="@+id/cart_settle_all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_18"
+            android:textColor="@color/colorFoodPrice"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/dp_10" />
+
+        <Button
+            android:id="@+id/cart_settle_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/colorSecondaryText"
+            android:background="@color/position_loading_layout_bg"
+            android:clickable="false"
+            android:padding="@dimen/dp_5"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/dp_5" />
+    </RelativeLayout>
+</LinearLayout>

@@ -14,7 +14,7 @@ public class Store extends BmobObject {
     private String storeAvatar;
     private BmobGeoPoint storeLocation;
     private String storeAnnouncement;
-    private Integer storeStartingPrice;
+    private Double storeStartingPrice;
     private Float storeDeliveryFee;
     private Integer storePerCapita;
     private Integer storeMonthSoldOn;
@@ -64,11 +64,11 @@ public class Store extends BmobObject {
         this.storeAnnouncement = storeAnnouncement;
     }
 
-    public Integer getStoreStartingPrice() {
+    public Double getStoreStartingPrice() {
         return storeStartingPrice;
     }
 
-    public void setStoreStartingPrice(Integer storeStartingPrice) {
+    public void setStoreStartingPrice(Double storeStartingPrice) {
         this.storeStartingPrice = storeStartingPrice;
     }
 

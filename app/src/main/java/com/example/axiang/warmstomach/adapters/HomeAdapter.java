@@ -281,7 +281,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         viewHolder.itemStoreName.setText(store.getStoreName());
         viewHolder.itemStoreType.setText(store.getStoreType());
         viewHolder.itemStoreMonthSoldOn.setText(store.getStoreMonthSoldOn().intValue() + "");
-        viewHolder.itemStoreStartingPrice.setText(store.getStoreStartingPrice().intValue() + "");
+        viewHolder.itemStoreStartingPrice.setText(store.getStoreStartingPrice().doubleValue() + "");
         viewHolder.itemStoreDelivery.setText(store.getStoreDeliveryFee().floatValue() + "");
         viewHolder.itemStorePerCapita.setText(store.getStorePerCapita().intValue() + "");
         if (store.getStoreOnlinePayment() == null || !store.getStoreOnlinePayment().booleanValue()) {

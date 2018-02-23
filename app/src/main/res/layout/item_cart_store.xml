@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_32"
+    android:background="@color/fragment_home_bg">
+
+    <CheckBox
+        android:id="@+id/check_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox"
+        android:layout_gravity="center_vertical"
+        android:checked="true"
+        android:layout_margin="@dimen/dp_5" />
+
+     <com.example.axiang.warmstomach.widget.CircleImageView
+         android:id="@+id/cart_store_avatar"
+         android:layout_width="@dimen/dp_16"
+         android:layout_height="@dimen/dp_16"
+         android:layout_gravity="center_vertical"
+         android:layout_marginStart="@dimen/dp_5"
+         android:src="@drawable/image_loading"
+         android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/cart_store_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLength="@integer/integer_16"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/dp_5"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="@dimen/sp_12" />
+
+    <TextView
+        android:id="@+id/cart_store_sharp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="@dimen/sp_15"
+        android:text="@string/sharp" />
+</LinearLayout>

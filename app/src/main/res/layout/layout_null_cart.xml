@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="ContentDescription"
+    android:background="@color/fragment_home_bg">
+
+    <ImageView
+        android:id="@+id/null_cart_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/null_cart"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/null_cart_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/null_cart_image"
+        android:text="@string/null_cart_hint"
+        android:textSize="@dimen/sp_15"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorSecondaryText"
+        android:layout_marginTop="@dimen/dp_12" />
+
+    <Button
+        android:id="@+id/bt_go_shopping"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/null_cart_hint"
+        android:text="@string/go_shopping"
+        android:textSize="@dimen/sp_15"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/register_get_vertify"
+        android:padding="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_12" />
+</RelativeLayout>

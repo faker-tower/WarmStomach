@@ -44,6 +44,7 @@ import com.example.axiang.warmstomach.interfaces.OnAdColumnItemListener;
 import com.example.axiang.warmstomach.interfaces.OnPositionStatedListener;
 import com.example.axiang.warmstomach.interfaces.OnStoreItemListener;
 import com.example.axiang.warmstomach.ui.home.MainActivity;
+import com.example.axiang.warmstomach.ui.settlement.SettlementActivity;
 import com.example.axiang.warmstomach.ui.store.StoreActivity;
 import com.example.axiang.warmstomach.util.ToastUtil;
 import com.example.axiang.warmstomach.widget.CustomSnackbar;
@@ -355,7 +356,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 if (!isShoppingCartEntering) {
                     mHomeHandler.sendEmptyMessage(C.SHOOPING_CART_NORMAL);
                 }
-                Intent intent = new Intent();
+                startActivity(new Intent(mainActivity, SettlementActivity.class));
             }
         });
     }
