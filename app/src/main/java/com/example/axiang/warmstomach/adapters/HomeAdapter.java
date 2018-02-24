@@ -1,6 +1,7 @@
 package com.example.axiang.warmstomach.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,9 @@ import com.example.axiang.warmstomach.interfaces.AdColumnOnClickListener;
 import com.example.axiang.warmstomach.interfaces.HomeListener;
 import com.example.axiang.warmstomach.interfaces.OnAdColumnItemListener;
 import com.example.axiang.warmstomach.interfaces.OnStoreItemListener;
+import com.example.axiang.warmstomach.interfaces.OnSuperStoreListener;
+import com.example.axiang.warmstomach.ui.settlement.SettlementActivity;
+import com.example.axiang.warmstomach.ui.store.StoreActivity;
 import com.example.axiang.warmstomach.util.CalculateUtil;
 import com.example.axiang.warmstomach.util.SharedPreferencesUtil;
 
@@ -91,6 +95,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private StoreTypeAdapter mStoreTypeAdapter;
     private List<StoreType> mStoreTypes;
 
+    // SuperStore模块
+    private OnSuperStoreListener mSuperStoreListener;
+
     // 底部加载更多模块
     private FooterViewHolder mFooterViewHolder;
 
@@ -117,6 +124,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setOnAdColumnItemListener(OnAdColumnItemListener adColumnItemListener) {
         this.mAdColumnItemListener = adColumnItemListener;
+    }
+
+    public void setOnSuperStoreListener(OnSuperStoreListener superStoreListener) {
+        this.mSuperStoreListener = superStoreListener;
     }
 
     public void setStoreTypes(List<StoreType> storeTypes) {
@@ -329,6 +340,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .placeholder(R.drawable.image_loading)
                         .error(R.drawable.error))
                 .into(viewHolder.superStoreAvatar);
+        viewHolder.superStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSuperStoreListener != null) {
+                    mSuperStoreListener.onSuperStoreClicked(mStore);
+                }
+            }
+        });
     }
 
     private void initStoreType(StoreTypeViewHolder viewHolder) {

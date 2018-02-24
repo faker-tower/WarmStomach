@@ -132,4 +132,7 @@ public class C {
     public static final int SETTLE_TYPE_CART = 15;
     // SettlementAdapter中的Settle类型
     public static final int SETTLE_TYPE_SETTLE = 16;
+
+    // 启动OrderActivity需要传入的Store
+    public static final String NEED_SETTLE_STORE = "need_settle_store";
 }

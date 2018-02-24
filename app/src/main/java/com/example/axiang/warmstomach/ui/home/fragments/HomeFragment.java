@@ -43,6 +43,7 @@ import com.example.axiang.warmstomach.enums.PositionState;
 import com.example.axiang.warmstomach.interfaces.OnAdColumnItemListener;
 import com.example.axiang.warmstomach.interfaces.OnPositionStatedListener;
 import com.example.axiang.warmstomach.interfaces.OnStoreItemListener;
+import com.example.axiang.warmstomach.interfaces.OnSuperStoreListener;
 import com.example.axiang.warmstomach.ui.home.MainActivity;
 import com.example.axiang.warmstomach.ui.settlement.SettlementActivity;
 import com.example.axiang.warmstomach.ui.store.StoreActivity;
@@ -594,6 +595,13 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                             Intent storeIntent = new Intent(mainActivity, StoreActivity.class);
                             storeIntent.putExtra(C.NEED_LOAD_STORE_ID, storeId);
                             startActivity(storeIntent);
+                        }
+                    });
+                    mHomeAdapter.setOnSuperStoreListener(new OnSuperStoreListener() {
+                        @Override
+                        public void onSuperStoreClicked(Store store) {
+                            startActivity(new Intent(mainActivity, StoreActivity.class)
+                                    .putExtra(C.NEED_LOAD_STORE, store));
                         }
                     });
                     homeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

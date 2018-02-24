@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.axiang.warmstomach.ActivityCollector;
@@ -32,6 +31,7 @@ import com.example.axiang.warmstomach.data.Store;
 import com.example.axiang.warmstomach.enums.CartCheckState;
 import com.example.axiang.warmstomach.interfaces.OnCartListener;
 import com.example.axiang.warmstomach.ui.home.MainActivity;
+import com.example.axiang.warmstomach.ui.order.OrderActivity;
 import com.example.axiang.warmstomach.ui.store.StoreActivity;
 import com.example.axiang.warmstomach.widget.CustomPopupWindow;
 
@@ -80,11 +80,14 @@ public class SettlementActivity extends AppCompatActivity {
     private View mNullCartView;
     private SettlementAdapter mSettlementAdapter;
     private List<Object> mDatas;
-    private List<CartCheckState> mStatues;
+    private List<CartCheckState> mStates;
     private boolean isEditing = false;
     private List<CartCheckState> mDeteleStates;
     private boolean isInitData = false;
     private CustomPopupWindow mPopupWindow;
+
+    // 是否是由Store界面回来的
+    private boolean isStartFromStore = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,29 +112,14 @@ public class SettlementActivity extends AppCompatActivity {
     private void initData() {
         List<Cart> carts = WarmStomachApplication.getCarts();
         if (carts.isEmpty()) {
-            settleEdit.setVisibility(View.GONE);
-            if (mNullCartView == null) {
-                mNullCartView = LayoutInflater.from(this)
-                        .inflate(R.layout.layout_null_cart,
-                                settleContentLayout,
-                                false);
-                mNullCartView.findViewById(R.id.bt_go_shopping)
-                        .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(new Intent(SettlementActivity.this,
-                                MainActivity.class));
-                    }
-                });
-            }
-            settleContentLayout.addView(mNullCartView);
+            addNullCartView();
         } else {
             mDatas = getSortDatas(carts);
             if (mSettlementAdapter == null) {
                 isEditing = false;
                 mSettlementAdapter = new SettlementAdapter(this,
                         mDatas,
-                        mStatues,
+                        mStates,
                         isEditing);
                 mSettlementAdapter.setOnCartListener(new OnCartListener() {
                     @Override
@@ -154,6 +142,7 @@ public class SettlementActivity extends AppCompatActivity {
                             storeCheckedOfEditing(isChecked, position);
                             isCanDelete(isChecked);
                         } else {
+                            isStartFromStore = true;
                             Store store = (Store) mDatas.get(position);
                             startActivity(new Intent(SettlementActivity.this,
                                     StoreActivity.class).putExtra(C.NEED_LOAD_STORE, store));
@@ -216,14 +205,16 @@ public class SettlementActivity extends AppCompatActivity {
 
                     @Override
                     public void onGoSettleClicked(int position) {
-
+                        Store store = ((Cart) mDatas.get(position - 1)).getStore();
+                        startActivity(new Intent(SettlementActivity.this,
+                                OrderActivity.class).putExtra(C.NEED_SETTLE_STORE, store));
                     }
                 });
                 settleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
                 settleRecyclerView.setAdapter(mSettlementAdapter);
             } else {
                 mSettlementAdapter.setDatas(mDatas);
-                mSettlementAdapter.setStates(mStatues);
+                mSettlementAdapter.setStates(mStates);
                 mSettlementAdapter.setIsEditing(isEditing);
                 mSettlementAdapter.notifyDataSetChanged();
             }
@@ -258,44 +249,44 @@ public class SettlementActivity extends AppCompatActivity {
         });
         mPopupWindow.setChildOnCilickListener(R.id.cart_popup_determine,
                 new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPopupWindow.onDismiss();
-                List<Cart> carts = WarmStomachApplication.getCarts();
-                for (int i = 0; i < mStatues.size(); i++) {
-                    Object object = mDatas.get(i);
-                    if (object instanceof Store) {
-                        Store store = (Store) mDatas.get(i);
-                        if (((Cart) mDatas.get(position)).getStore().equals(store)) {
-                            boolean isAlsoCartOfStore = false;
-                            for (int j = i + 1; j < mStatues.size(); j++) {
-                                if (mStatues.get(j) == CartCheckState.NON_STATE) {
-                                    break;
-                                } else {
-                                    if (mDatas.get(j) instanceof Cart) {
-                                        Cart cart = (Cart) mDatas.get(j);
-                                        if (!cart.equals(mDatas.get(position))) {
-                                            isAlsoCartOfStore = true;
+                    @Override
+                    public void onClick(View v) {
+                        mPopupWindow.onDismiss();
+                        List<Cart> carts = WarmStomachApplication.getCarts();
+                        for (int i = 0; i < mStates.size(); i++) {
+                            Object object = mDatas.get(i);
+                            if (object instanceof Store) {
+                                Store store = (Store) mDatas.get(i);
+                                if (((Cart) mDatas.get(position)).getStore().equals(store)) {
+                                    boolean isAlsoCartOfStore = false;
+                                    for (int j = i + 1; j < mStates.size(); j++) {
+                                        if (mStates.get(j) == CartCheckState.NON_STATE) {
                                             break;
+                                        } else {
+                                            if (mDatas.get(j) instanceof Cart) {
+                                                Cart cart = (Cart) mDatas.get(j);
+                                                if (!cart.equals(mDatas.get(position))) {
+                                                    isAlsoCartOfStore = true;
+                                                    break;
+                                                }
+                                            }
                                         }
+                                    }
+                                    if (!isAlsoCartOfStore) {
+                                        mStates.remove(position + 1);
+                                        mStates.remove(position);
+                                        mStates.remove(i);
+                                    } else {
+                                        mStates.remove(position);
                                     }
                                 }
                             }
-                            if (!isAlsoCartOfStore) {
-                                mStatues.remove(position + 1);
-                                mStatues.remove(position);
-                                mStatues.remove(i);
-                            } else {
-                                mStatues.remove(position);
-                            }
                         }
+                        carts.remove(mDatas.get(position));
+                        initData();
+                        deleteSingleChecking();
                     }
-                }
-                carts.remove(mDatas.get(position));
-                initData();
-                deleteSingleChecking();
-            }
-        });
+                });
     }
 
     private void isCanDelete(boolean isChecked) {
@@ -414,14 +405,14 @@ public class SettlementActivity extends AppCompatActivity {
                             * ((Cart) mDatas.get(i)).getNumber();
                 }
                 if (isChecked) {
-                    mStatues.set(i, CartCheckState.CHECK_STATE);
+                    mStates.set(i, CartCheckState.CHECK_STATE);
                 } else {
-                    mStatues.set(i, CartCheckState.NO_CHECK_STATE);
+                    mStates.set(i, CartCheckState.NO_CHECK_STATE);
                 }
             }
         }
         mSettlementAdapter.setDatas(mDatas);
-        mSettlementAdapter.setStates(mStatues);
+        mSettlementAdapter.setStates(mStates);
         settleRecyclerView.post(new Runnable() {
             @Override
             public void run() {
@@ -454,14 +445,14 @@ public class SettlementActivity extends AppCompatActivity {
     }
 
     private void removeSettleList(int position) {
-        mStatues.set(position, CartCheckState.NO_CHECK_STATE);
+        mStates.set(position, CartCheckState.NO_CHECK_STATE);
         Cart cart = (Cart) mDatas.get(position);
         double nowAllPrice = 0.0;
         double startingPrice = 0.0;
         for (int i = position - 1; i >= 0; i--) {
             if (mDatas.get(i) instanceof Store) {
                 startingPrice = ((Store) mDatas.get(i)).getStoreStartingPrice();
-                mStatues.set(i, CartCheckState.NO_CHECK_STATE);
+                mStates.set(i, CartCheckState.NO_CHECK_STATE);
                 mSettlementAdapter.setSingleState(i, CartCheckState.NO_CHECK_STATE);
                 updateRvLayout(i);
                 break;
@@ -495,7 +486,7 @@ public class SettlementActivity extends AppCompatActivity {
     }
 
     private void addSettleList(int position) {
-        mStatues.set(position, CartCheckState.CHECK_STATE);
+        mStates.set(position, CartCheckState.CHECK_STATE);
         Cart cart = (Cart) mDatas.get(position);
         double nowAllPrice = 0.0;
         double startingPrice = 0.0;
@@ -508,7 +499,7 @@ public class SettlementActivity extends AppCompatActivity {
                 storePosition = i;
                 break;
             } else {
-                if (mStatues.get(i) != CartCheckState.CHECK_STATE) {
+                if (mStates.get(i) != CartCheckState.CHECK_STATE) {
                     checkAllTop = false;
                 }
             }
@@ -537,16 +528,16 @@ public class SettlementActivity extends AppCompatActivity {
                 updateRvLayout(i);
                 break;
             } else {
-                if (mStatues.get(i) != CartCheckState.CHECK_STATE) {
+                if (mStates.get(i) != CartCheckState.CHECK_STATE) {
                     checkAllBottom = false;
                 }
             }
         }
         if (checkAllTop && checkAllBottom) {
-            mStatues.set(storePosition, CartCheckState.CHECK_STATE);
+            mStates.set(storePosition, CartCheckState.CHECK_STATE);
             mSettlementAdapter.setSingleState(storePosition, CartCheckState.CHECK_STATE);
         } else {
-            mStatues.set(storePosition, CartCheckState.NO_CHECK_STATE);
+            mStates.set(storePosition, CartCheckState.NO_CHECK_STATE);
             mSettlementAdapter.setSingleState(storePosition, CartCheckState.NO_CHECK_STATE);
         }
         updateRvLayout(storePosition);
@@ -564,7 +555,7 @@ public class SettlementActivity extends AppCompatActivity {
     private List<Object> getSortDatas(@NonNull List<Cart> carts) {
         List<Object> datas = new ArrayList<>();
         if (!isInitData) {
-            mStatues = new ArrayList<>();
+            mStates = new ArrayList<>();
         }
         List<Store> stores = new ArrayList<>();
         for (Cart cart : carts) {
@@ -575,14 +566,14 @@ public class SettlementActivity extends AppCompatActivity {
             stores.add(store);
             datas.add(store);
             if (!isInitData) {
-                mStatues.add(CartCheckState.CHECK_STATE);
+                mStates.add(CartCheckState.CHECK_STATE);
             }
             double nowAllPrice = 0.0;
             for (int i = 0; i < carts.size(); i++) {
                 if (carts.get(i).getStore().equals(store)) {
                     datas.add(carts.get(i));
                     if (!isInitData) {
-                        mStatues.add(CartCheckState.CHECK_STATE);
+                        mStates.add(CartCheckState.CHECK_STATE);
                     }
                     nowAllPrice += carts.get(i).getStoreFood().getFoodPrice()
                             * carts.get(i).getNumber();
@@ -601,7 +592,7 @@ public class SettlementActivity extends AppCompatActivity {
             Settle settle = new Settle(nowAllPrice, settleButtonText, settleButtonClickable);
             datas.add(settle);
             if (!isInitData) {
-                mStatues.add(CartCheckState.NON_STATE);
+                mStates.add(CartCheckState.NON_STATE);
             }
         }
         return datas;
@@ -633,7 +624,7 @@ public class SettlementActivity extends AppCompatActivity {
                 } else {
                     cancelDeleteState();
                     mSettlementAdapter.setIsEditing(isEditing);
-                    mSettlementAdapter.setStates(mStatues);
+                    mSettlementAdapter.setStates(mStates);
                     mSettlementAdapter.notifyDataSetChanged();
                 }
                 break;
@@ -643,14 +634,14 @@ public class SettlementActivity extends AppCompatActivity {
                     if (mDeteleStates.get(i) == CartCheckState.CHECK_STATE) {
                         Object object = mDatas.get(i);
                         if (object instanceof Store) {
-                            for (int j = i + 1; j < mStatues.size(); j++) {
-                                if (mStatues.get(j) == CartCheckState.NON_STATE) {
-                                    mStatues.remove(j);
+                            for (int j = i + 1; j < mStates.size(); j++) {
+                                if (mStates.get(j) == CartCheckState.NON_STATE) {
+                                    mStates.remove(j);
                                     break;
                                 }
                             }
                         }
-                        mStatues.remove(i);
+                        mStates.remove(i);
                         if (object instanceof Cart) {
                             carts.remove(object);
                         }
@@ -665,23 +656,23 @@ public class SettlementActivity extends AppCompatActivity {
 
     // 删除单个数据之后检查剩下的数据是否全是已点击状态，是则将Store数据也设置为点击状态
     private void deleteSingleChecking() {
-        if (!mStatues.isEmpty()) {
-            for (int i = 0; i < mStatues.size(); i++) {
+        if (!mStates.isEmpty()) {
+            for (int i = 0; i < mStates.size(); i++) {
                 if (mDatas.get(i) instanceof Store
-                        && mStatues.get(i) == CartCheckState.NO_CHECK_STATE) {
+                        && mStates.get(i) == CartCheckState.NO_CHECK_STATE) {
                     boolean isAllSeleted = true;
-                    for (int j = i + 1; j < mStatues.size(); j++) {
-                        if (mStatues.get(j) == CartCheckState.NON_STATE) {
+                    for (int j = i + 1; j < mStates.size(); j++) {
+                        if (mStates.get(j) == CartCheckState.NON_STATE) {
                             break;
                         } else {
-                            if (mStatues.get(j) == CartCheckState.NO_CHECK_STATE) {
+                            if (mStates.get(j) == CartCheckState.NO_CHECK_STATE) {
                                 isAllSeleted = false;
                                 break;
                             }
                         }
                     }
                     if (isAllSeleted) {
-                        mStatues.set(i, CartCheckState.CHECK_STATE);
+                        mStates.set(i, CartCheckState.CHECK_STATE);
                         mSettlementAdapter.setSingleState(i, CartCheckState.CHECK_STATE);
                         updateRvLayout(i);
                     }
@@ -707,6 +698,112 @@ public class SettlementActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addNullCartView() {
+        if (mDatas != null) {
+            mDatas = null;
+        }
+        if (mStates != null) {
+            mStates = null;
+        }
+        isEditing = false;
+        settleEdit.setVisibility(View.GONE);
+        if (mNullCartView == null) {
+            mNullCartView = LayoutInflater.from(this)
+                    .inflate(R.layout.layout_null_cart,
+                            settleContentLayout,
+                            false);
+            mNullCartView.findViewById(R.id.bt_go_shopping)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(SettlementActivity.this,
+                                    MainActivity.class));
+                        }
+                    });
+        }
+        settleContentLayout.addView(mNullCartView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isStartFromStore) {
+            updateWhenStoreBack();
+            isStartFromStore = false;
+        }
+    }
+
+    private void updateWhenStoreBack() {
+        List<Cart> carts = WarmStomachApplication.getCarts();
+        if (carts.isEmpty()) {
+            addNullCartView();
+        } else {
+            List<Cart> noSelectCarts = new ArrayList<>();
+            if (mDatas != null) {
+                for (int i = 0; i < mDatas.size(); i++) {
+                    if (mDatas.get(i) instanceof Cart
+                            && mStates.get(i) == CartCheckState.NO_CHECK_STATE) {
+                        noSelectCarts.add((Cart) mDatas.get(i));
+                    }
+                }
+            }
+            isInitData = false;
+            mDatas = getSortDatas(carts);
+            isInitData = true;
+            boolean isCheckAll = true;
+            int storeIndex = 0;
+            double needCutPrice = 0.0;
+            double startingPrice = 0.0;
+            for (int i = 0; i < mDatas.size(); i++) {
+                if (mDatas.get(i) instanceof Store) {
+                    storeIndex = i;
+                    isCheckAll = true;
+                    storeIndex = i;
+                    needCutPrice = 0.0;
+                    startingPrice = ((Store) mDatas.get(i)).getStoreStartingPrice();
+                } else if (mDatas.get(i) instanceof Cart) {
+                    Cart cart = (Cart) mDatas.get(i);
+                    if (noSelectCarts.contains(cart)) {
+                        if (noSelectCarts.get(noSelectCarts.indexOf(cart)).getNumber()
+                                == cart.getNumber()) {
+                            isCheckAll = false;
+                            needCutPrice += cart.getStoreFood().getFoodPrice()
+                                    * cart.getNumber();
+                            mStates.set(i, CartCheckState.NO_CHECK_STATE);
+                        }
+                    }
+                } else {
+                    if (isCheckAll) {
+                        mStates.set(storeIndex, CartCheckState.CHECK_STATE);
+                    } else {
+                        mStates.set(storeIndex, CartCheckState.NO_CHECK_STATE);
+                        if (needCutPrice != 0.0) {
+                            Settle settle = (Settle) mDatas.get(i);
+                            settle.setNowAllPrice(settle.getNowAllPrice() - needCutPrice);
+                            double differencePrice = startingPrice
+                                    - settle.getNowAllPrice();
+                            if (differencePrice > 0) {
+                                settle.setSettleButtonText(lackText
+                                        + moneySymbolText
+                                        + differencePrice
+                                        + toSendText);
+                                settle.setSettleButtonClickable(false);
+                            } else {
+                                settle.setSettleButtonText(toSettleText);
+                                settle.setSettleButtonClickable(true);
+                            }
+                        }
+                    }
+                }
+            }
+            mSettlementAdapter.setDatas(mDatas);
+            mSettlementAdapter.setStates(mStates);
+            mSettlementAdapter.setIsEditing(isEditing);
+            mSettlementAdapter.notifyDataSetChanged();
+        }
+
     }
 
     @Override

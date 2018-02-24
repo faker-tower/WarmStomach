@@ -117,4 +117,17 @@
     <string name="prompt">提示</string>
     <string name="want_to_delete">确认要删除吗？</string>
     <string name="determine">确定</string>
+    
+    <!--OrderActivity-->
+    <string name="submit_order">提交订单</string>
+    <string name="total">合计</string>
+    <string name="choose_address">选择收货地址</string>
+    <string name="send_immediately">立即送出</string>
+    <string name="send_time">（大约06:25送达）</string>
+    <string name="your_phone_number">您的电话：</string>
+    <string name="greeting_card_content">贺卡内容：</string>
+    <string name="your_phone_hint">以便商家与您及时沟通</string>
+    <string name="greeting_card_hint">选填，填写贺卡内容</string>
+    <string name="click_to_expand">点击展开</string>
+    <string name="click_to_collapse">点击收起</string>
 </resources>

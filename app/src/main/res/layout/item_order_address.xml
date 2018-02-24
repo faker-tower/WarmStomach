@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_180"
+    android:layout_marginEnd="@dimen/dp_10"
+    android:layout_marginStart="@dimen/dp_10"
+    android:layout_marginTop="@dimen/dp_10"
+    app:cardCornerRadius="@dimen/dp_10"
+    app:cardElevation="@dimen/dp_10"
+    android:background="@color/fragment_home_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/order_address_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="@integer/integer_2">
+
+            <Button
+                android:id="@+id/order_add_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/order_address_bt_bg"
+                android:drawableStart="@drawable/add"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingEnd="@dimen/dp_20"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingTop="@dimen/dp_10"
+                android:text="@string/choose_address"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp_18" />
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/order_choose_time_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="@integer/integer_1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:text="@string/sharp"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/order_send_immediately"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dp_12"
+                android:text="@string/send_immediately"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/order_send_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_toEndOf="@id/order_send_immediately"
+                android:text="@string/send_time"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/sp_12" />
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

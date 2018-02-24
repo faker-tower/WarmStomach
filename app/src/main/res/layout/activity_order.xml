@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/food_sort_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".ui.order.OrderActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/settle_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="@dimen/dp_4"
+            android:fitsSystemWindows="true"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="@string/submit_order"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|exitUntilCollapsed|snap" />
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginBottom="@dimen/dp_56"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/dp_36">
+
+            <include layout="@layout/item_order_address" />
+
+            <include layout="@layout/item_order_phone" />
+
+            <include layout="@layout/item_order_store" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_56"
+        android:background="@color/colorSecondaryText">
+
+        <Button
+            android:id="@+id/order_submit_order"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp_18"
+            android:textColor="@color/colorPrimaryText"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/dp_12"
+            android:gravity="center"
+            android:text="@string/submit_order"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/order_all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_18"
+            android:textColor="@color/cart_layout_bg"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/order_submit_order"
+            android:textStyle="bold"
+            android:layout_marginEnd="@dimen/dp_12" />
+
+        <TextView
+            android:id="@+id/order_money_symbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_18"
+            android:textColor="@color/cart_layout_bg"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/order_all_price"
+            android:textStyle="bold"
+            android:text="@string/money_symbol" />
+
+        <TextView
+            android:id="@+id/order_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_18"
+            android:textColor="@color/cart_layout_bg"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/order_money_symbol"
+            android:textStyle="bold"
+            android:text="@string/total"
+            android:layout_marginEnd="@dimen/dp_5" />
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

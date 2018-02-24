@@ -116,4 +116,17 @@
     <string name="prompt">Prompt</string>
     <string name="want_to_delete">Do you want to delete it?</string>
     <string name="determine">Determine</string>
+
+    <!--OrderActivity-->
+    <string name="submit_order">Submit order</string>
+    <string name="total">Total</string>
+    <string name="choose_address">Choose address</string>
+    <string name="send_immediately">Send immediately</string>
+    <string name="send_time">(about 06:25 served)</string>
+    <string name="your_phone_number">your phone number:</string>
+    <string name="greeting_card_content">Greeting card content:</string>
+    <string name="your_phone_hint">So that businesses can communicate with you in time</string>
+    <string name="greeting_card_hint">Optional, fill in the greeting card content</string>
+    <string name="click_to_expand">Click to expand</string>
+    <string name="click_to_collapse">Click to collapse</string>
 </resources>

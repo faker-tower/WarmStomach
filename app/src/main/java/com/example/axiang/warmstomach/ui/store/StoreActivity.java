@@ -152,6 +152,8 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
     private boolean isLoadSortSuceess = false;
     // 是否成功加载商家食物信息
     private boolean isLoadFoodSuceess = false;
+    // 是否第一次onResume
+    private boolean isFirstResume = true;
 
     private StoreContract.Presenter mPresenter;
     private CustomSnackbar mSnackbar;
@@ -851,6 +853,20 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isFirstResume) {
+            mFoodCount = 0;
+            mNowAllPrice = 0.0;
+            Map<StoreFood, Integer> carts = getFoodCartMap(true);
+            mFoodAdapter.setCarts(carts);
+            mFoodAdapter.notifyDataSetChanged();
+        } else {
+            isFirstResume = false;
+        }
     }
 
     @Override
