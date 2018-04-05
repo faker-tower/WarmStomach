@@ -33,6 +33,7 @@
     <dimen name="sp_18">18sp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_13">13sp</dimen>
     <dimen name="sp_12">12sp</dimen>
     <dimen name="sp_10">10sp</dimen>
 
@@ -41,7 +42,9 @@
     <integer name="integer_200">200</integer>
     <integer name="integer_135">135</integer>
     <integer name="integer_100">100</integer>
+    <integer name="integer_50">50</integer>
     <integer name="integer_16">16</integer>
+    <integer name="integer_11">11</integer>
     <integer name="integer_8">8</integer>
     <integer name="integer_6">6</integer>
     <integer name="integer_4">4</integer>

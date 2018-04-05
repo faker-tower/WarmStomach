@@ -130,4 +130,15 @@
     <string name="greeting_card_hint">选填，填写贺卡内容</string>
     <string name="click_to_expand">点击展开</string>
     <string name="click_to_collapse">点击收起</string>
+    <string name="delivery_fee">配送费</string>
+    <string name="warm_stomach_red_envelope">暖胃红包</string>
+    <string name="no_available">暂无可用</string>
+    <string name="merchant_gold_roll">商家代金卷</string>
+    <string name="payment_method">支付方式</string>
+    <string name="note">备注</string>
+    <string name="taste_preference_etc">口味、偏好等要求</string>
+    <string name="tableware_quantity">餐具数量</string>
+    <string name="not_selected">未选择</string>
+    <string name="invoice">发票</string>
+    <string name="no_invoicing">该商家不支持开发票</string>
 </resources>

@@ -28,6 +28,7 @@ import com.example.axiang.warmstomach.adapters.SettlementAdapter;
 import com.example.axiang.warmstomach.data.Cart;
 import com.example.axiang.warmstomach.data.Settle;
 import com.example.axiang.warmstomach.data.Store;
+import com.example.axiang.warmstomach.data.StoreFood;
 import com.example.axiang.warmstomach.enums.CartCheckState;
 import com.example.axiang.warmstomach.interfaces.OnCartListener;
 import com.example.axiang.warmstomach.ui.home.MainActivity;
@@ -35,6 +36,7 @@ import com.example.axiang.warmstomach.ui.order.OrderActivity;
 import com.example.axiang.warmstomach.ui.store.StoreActivity;
 import com.example.axiang.warmstomach.widget.CustomPopupWindow;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +94,7 @@ public class SettlementActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityCollector.add(this);
         setContentView(R.layout.activity_settlement);
         ButterKnife.bind(this);
         initView();
@@ -206,8 +209,19 @@ public class SettlementActivity extends AppCompatActivity {
                     @Override
                     public void onGoSettleClicked(int position) {
                         Store store = ((Cart) mDatas.get(position - 1)).getStore();
+                        List<Cart> settleFoods = new ArrayList<>();
+                        for (int i = position - 1; i > 0; i--) {
+                            if (mDatas.get(i) instanceof Cart
+                                    && mStates.get(i) == CartCheckState.CHECK_STATE) {
+                                settleFoods.add((Cart) mDatas.get(i));
+                            } else if (mDatas.get(i) instanceof Store) {
+                                break;
+                            }
+                        }
                         startActivity(new Intent(SettlementActivity.this,
-                                OrderActivity.class).putExtra(C.NEED_SETTLE_STORE, store));
+                                OrderActivity.class)
+                                .putExtra(C.NEED_SETTLE_STORE, store)
+                                .putExtra(C.NEED_SETTLE_STORE_FOOD, (Serializable) settleFoods));
                     }
                 });
                 settleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -284,7 +298,9 @@ public class SettlementActivity extends AppCompatActivity {
                         }
                         carts.remove(mDatas.get(position));
                         initData();
-                        deleteSingleChecking();
+                        if (!carts.isEmpty()) {
+                            deleteSingleChecking();
+                        }
                     }
                 });
     }

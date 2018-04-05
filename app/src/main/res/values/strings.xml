@@ -129,4 +129,15 @@
     <string name="greeting_card_hint">Optional, fill in the greeting card content</string>
     <string name="click_to_expand">Click to expand</string>
     <string name="click_to_collapse">Click to collapse</string>
+    <string name="delivery_fee">Delivery fee</string>
+    <string name="warm_stomach_red_envelope">Warm stomach red envelope</string>
+    <string name="no_available">No available</string>
+    <string name="merchant_gold_roll">Merchant gold roll</string>
+    <string name="payment_method">Payment method</string>
+    <string name="note">Note</string>
+    <string name="taste_preference_etc">Taste, preference, etc.</string>
+    <string name="tableware_quantity">Tableware quantity</string>
+    <string name="not_selected">Not selected</string>
+    <string name="invoice">Invoice</string>
+    <string name="no_invoicing">This merchant does not support invoicing</string>
 </resources>

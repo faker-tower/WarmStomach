@@ -68,6 +68,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import butterknife.BindColor;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -337,8 +338,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private void initContentView() {
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED)
-                // 设置点击之后会扩散的背景的特效
-                .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE)
+                // 设置点击特效
+                .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
+                // 设置背景颜色
+                .setBarBackgroundColor(R.color.bottom_nav_bar_bg)
                 // 设置选中的颜色
                 .setActiveColor(R.color.colorPrimary)
                 // 设置未选中的颜色
@@ -722,9 +725,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                     try {
                         Intent intent = ImageUtil.cutForPhoto(data.getData(),
                                 ImageUtil.px2dip(this,
-                                        mNavHeaderViewHolder.navHeaderImage.getWidth()),
+                                        mNavHeaderViewHolder.navHeaderImage.getWidth() * 2),
                                 ImageUtil.px2dip(this,
-                                        mNavHeaderViewHolder.navHeaderImage.getHeight()),
+                                        mNavHeaderViewHolder.navHeaderImage.getHeight() * 2),
                                 mTitleImageCutFile);
                         startActivityForResult(intent, C.REQUEST_PHOTO_CROP);
                     } catch (IOException e) {

@@ -1,10 +1,14 @@
 package com.example.axiang.warmstomach.data;
 
+import java.io.Serializable;
+
 /**
  * Created by a2389 on 2018/2/16.
  */
 
-public class Cart {
+public class Cart implements Serializable {
+
+    private static final long serialVersionUID = 7247714666080613254L;
 
     private Store store;
     private StoreFood storeFood;

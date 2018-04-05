@@ -1,2 +1,2 @@
 # WarmStomach
-基于Android的外卖App开发,采用Bmob作为后台数据库，符合Material Design风格设计，实现了Android7.0相机相册适配，NestedScrollView嵌套RecyclerView的滑动冲突解决问题，Api过高问题的解决，RecyclerView的下拉加载和上拉刷新，综合运用了自定义View和动画等知识，现在还未开发完成，但已经收获颇丰，继续开发。
+基于Android的外卖App开发,界面逻辑参考美团，采用Bmob作为后台，尽量实现高仿美团的样子，虽然受限于数据来源，但是美团该有的大体功能和逻辑的实现该有的还是要有，可惜外卖平台不适合作为个人开发项目，这类软件太吃数据了，缺少最重要的数据来源导致没法上线App Store，这倒是一大遗憾。

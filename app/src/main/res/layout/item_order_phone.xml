@@ -20,7 +20,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
 
             <TextView
                 android:id="@+id/tv_your_phone"
@@ -30,27 +32,29 @@
                 android:layout_marginStart="@dimen/dp_12"
                 android:text="@string/your_phone_number"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/sp_12" />
+                android:textSize="@dimen/sp_15" />
 
             <EditText
                 android:id="@+id/et_your_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/dp_12"
+                android:layout_marginEnd="@dimen/dp_48"
                 android:layout_marginStart="@dimen/dp_5"
                 android:layout_toEndOf="@id/tv_your_phone"
-                android:ellipsize="end"
                 android:hint="@string/your_phone_hint"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
                 android:inputType="phone"
-                android:maxLength="@integer/integer_1"
+                android:maxLength="@integer/integer_11"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/sp_12" />
+                android:textSize="@dimen/sp_15"
+                android:background="@null" />
 
             <ImageView
                 android:id="@+id/clear_edit_phone"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/dp_16"
@@ -64,13 +68,14 @@
             android:layout_height="@dimen/dp_1"
             android:layout_marginEnd="@dimen/dp_12"
             android:layout_marginStart="@dimen/dp_12"
-            android:background="@color/colorSecondaryText" />
-
+            android:background="@color/order_layout_dividing_line" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
 
             <TextView
                 android:id="@+id/tv_greeting_card"
@@ -80,27 +85,29 @@
                 android:layout_marginStart="@dimen/dp_12"
                 android:text="@string/greeting_card_content"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/sp_12" />
+                android:textSize="@dimen/sp_15" />
 
             <EditText
                 android:id="@+id/et_greeting_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/dp_12"
+                android:layout_marginEnd="@dimen/dp_48"
                 android:layout_marginStart="@dimen/dp_5"
                 android:layout_toEndOf="@id/tv_greeting_card"
-                android:ellipsize="end"
                 android:hint="@string/greeting_card_hint"
-                android:inputType="phone"
-                android:maxLength="@integer/integer_1"
+                android:maxLength="@integer/integer_50"
+                android:singleLine="true"
+                android:ellipsize="none"
+                android:imeOptions="actionDone"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/sp_12" />
+                android:textSize="@dimen/sp_15"
+                android:background="@null" />
 
             <ImageView
                 android:id="@+id/clear_all_card"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/dp_16"

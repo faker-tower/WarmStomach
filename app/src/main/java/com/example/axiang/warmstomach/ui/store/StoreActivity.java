@@ -19,7 +19,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -444,6 +443,8 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
                 updateShoppingCartLayout();
             }
         } else {
+            updatePriceLayout();
+            updateShoppingCartLayout();
             toSettle.setClickable(false);
             storeShoppingCart.setClickable(false);
         }
@@ -472,7 +473,12 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
                     public void onPwClosed() {
                         Map<StoreFood, Integer> carts = getFoodCartMap(false);
                         mFoodAdapter.setCarts(carts);
-                        mFoodAdapter.notifyDataSetChanged();
+                        rvStoreFood.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mFoodAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
                 })
                 .build()
@@ -496,7 +502,12 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
                 mFoodCount = 0;
                 mNowAllPrice = 0.0;
                 mFoodAdapter.setCarts(null);
-                mFoodAdapter.notifyDataSetChanged();
+                rvStoreFood.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFoodAdapter.notifyDataSetChanged();
+                    }
+                });
                 updatePriceLayout();
                 updateShoppingCartLayout();
             }
@@ -572,8 +583,8 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
                             .findViewHolderForAdapterPosition(i);
                     LinearLayoutManager manager = (LinearLayoutManager) rvStoreFood
                             .getLayoutManager();
-                    if (manager.findLastCompletelyVisibleItemPosition() >= i
-                            && manager.findFirstCompletelyVisibleItemPosition() <= i) {
+                    if (manager.findLastVisibleItemPosition() >= i
+                            && manager.findFirstVisibleItemPosition() <= i) {
                         mFoodAdapter.updateFoodByCart(holder, isAdded);
                     }
                 }
@@ -863,7 +874,12 @@ public class StoreActivity extends AppCompatActivity implements StoreContract.Vi
             mNowAllPrice = 0.0;
             Map<StoreFood, Integer> carts = getFoodCartMap(true);
             mFoodAdapter.setCarts(carts);
-            mFoodAdapter.notifyDataSetChanged();
+            rvStoreFood.post(new Runnable() {
+                @Override
+                public void run() {
+                    mFoodAdapter.notifyDataSetChanged();
+                }
+            });
         } else {
             isFirstResume = false;
         }

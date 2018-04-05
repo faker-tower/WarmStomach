@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/fragment_home_bg" />
+
+    <padding android:top="@dimen/dp_5"
+        android:bottom="@dimen/dp_5"
+        android:left="@dimen/dp_5"
+        android:right="@dimen/dp_5" />
+
+    <stroke android:color="@color/order_layout_dividing_line" android:width="@dimen/dp_1" />
+</shape>

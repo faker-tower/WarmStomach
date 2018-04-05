@@ -126,7 +126,7 @@ public class SettlementAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    private void initSettle(SettleViewHolder settleViewHolder, int position) {
+    private void initSettle(SettleViewHolder settleViewHolder, final int position) {
         Settle settle = (Settle) mDatas.get(position);
         settleViewHolder.cartSettleAllPrice
                 .setText(settleViewHolder.moneySymbol + String.valueOf(settle.getNowAllPrice()));
@@ -138,6 +138,14 @@ public class SettlementAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             settleViewHolder.cartSettleBt.setTextColor(settleViewHolder.canNotClickTextColor);
             settleViewHolder.cartSettleBt.setBackgroundColor(settleViewHolder.canNotClickBgColor);
         }
+        settleViewHolder.cartSettleBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnCartListener != null) {
+                    mOnCartListener.onGoSettleClicked(position);
+                }
+            }
+        });
         settleViewHolder.cartSettleBt.setClickable(settle.isSettleButtonClickable());
         if (isEditing) {
             settleViewHolder.cartSettleLayout.setVisibility(View.GONE);

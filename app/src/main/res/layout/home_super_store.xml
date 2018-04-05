@@ -17,13 +17,14 @@
     <RelativeLayout
         android:id="@+id/super_store"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bottom_nav_bar_bg"
+        android:layout_marginBottom="@dimen/dp_6">
 
         <ImageView
             android:id="@+id/super_store_avatar"
             android:layout_width="@dimen/dp_120"
             android:layout_height="@dimen/dp_120"
-            android:layout_marginStart="@dimen/dp_10"
             android:layout_centerVertical="true" />
 
         <RelativeLayout

@@ -135,4 +135,6 @@ public class C {
 
     // 启动OrderActivity需要传入的Store
     public static final String NEED_SETTLE_STORE = "need_settle_store";
+    // 启动OrderActivity需要传入的StoreFoods列表
+    public static final String NEED_SETTLE_STORE_FOOD = "need_settle_store_food";
 }

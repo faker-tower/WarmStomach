@@ -1,11 +1,9 @@
 package com.example.axiang.warmstomach.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,13 +23,10 @@ import com.example.axiang.warmstomach.R;
 import com.example.axiang.warmstomach.data.Store;
 import com.example.axiang.warmstomach.data.StoreAd;
 import com.example.axiang.warmstomach.data.StoreType;
-import com.example.axiang.warmstomach.interfaces.AdColumnOnClickListener;
 import com.example.axiang.warmstomach.interfaces.HomeListener;
 import com.example.axiang.warmstomach.interfaces.OnAdColumnItemListener;
 import com.example.axiang.warmstomach.interfaces.OnStoreItemListener;
 import com.example.axiang.warmstomach.interfaces.OnSuperStoreListener;
-import com.example.axiang.warmstomach.ui.settlement.SettlementActivity;
-import com.example.axiang.warmstomach.ui.store.StoreActivity;
 import com.example.axiang.warmstomach.util.CalculateUtil;
 import com.example.axiang.warmstomach.util.SharedPreferencesUtil;
 
@@ -153,13 +148,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void setStoreAds(List<StoreAd> storeAds) {
-        if (this.mStoreAds == null) {
-            this.mStoreAds = new ArrayList<>();
-        }
-        if (!this.mStoreAds.isEmpty()) {
-            this.mStoreAds.clear();
-        }
-        this.mStoreAds.addAll(storeAds);
+        this.mStoreAds = storeAds;
         if (mCarouselImageUrlList == null) {
             mCarouselImageUrlList = new ArrayList<>();
         }
